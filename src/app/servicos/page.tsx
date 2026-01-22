@@ -11,14 +11,37 @@ export const metadata = {
 
 const services = [
   {
+    title: "Mesa Radiónica",
+    description:
+      "Diagnóstico preciso de bloqueios energéticos, medição de chakras e limpeza profunda de magias ou formas-pensamento.",
+    duration: "60 minutos",
+    price: 50,
+    isPopular: true, // Lógica do Home
+    slug: "mesa-radionica",
+    image:
+      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=400&fit=crop",
+  },
+  {
+    title: "Terapia Multidimensional",
+    description:
+      "Conhecida como 'Cirurgia Espiritual', cura traumas emocionais profundos e reequilibra o coração.",
+    duration: "50 minutos",
+    price: 50,
+    isPopular: true, // Lógica do Home
+    slug: "terapia-multidimensional",
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=400&fit=crop",
+  },
+  {
     title: "Reiki Kundalini",
     description:
       "Desbloqueie a sua energia vital e desperte o seu potencial interior através da energia Kundalini.",
     duration: "60 minutos",
-    price: 80,
+    price: 55, // Preço atualizado conforme Home (era 80)
     isPopular: true,
     slug: "reiki-kundalini",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80&auto=format&fit=crop",
   },
   {
     title: "Leitura de Aura",
@@ -27,7 +50,8 @@ const services = [
     duration: "45 minutos",
     price: 60,
     slug: "leitura-aura",
-    image: "https://images.unsplash.com/photo-1544367567-0d6fcffe7f1f?w=600&q=80&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1544367567-0d6fcffe7f1f?w=600&q=80&auto=format&fit=crop",
   },
   {
     title: "Cura Holística",
@@ -35,8 +59,9 @@ const services = [
       "Uma abordagem integrativa para o equilíbrio corpo-mente-espírito.",
     duration: "90 minutos",
     price: 120,
-    slug: "cura-holistca",
-    image: "https://images.unsplash.com/photo-1599598427862-5e9ebf9a4d10?w=600&q=80&auto=format&fit=crop",
+    slug: "cura-holistica", // Typo fixed
+    image:
+      "https://images.unsplash.com/photo-1599598427862-5e9ebf9a4d10?w=600&q=80&auto=format&fit=crop",
   },
   {
     title: "Consultoria Energética",
@@ -45,7 +70,8 @@ const services = [
     duration: "75 minutos",
     price: 100,
     slug: "consultoria-energetica",
-    image: "https://images.unsplash.com/photo-1610332049839-cd79d8b83e60?w=600&q=80&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1610332049839-cd79d8b83e60?w=600&q=80&auto=format&fit=crop",
   },
   {
     title: "Meditação Guiada",
@@ -54,7 +80,8 @@ const services = [
     duration: "50 minutos",
     price: 50,
     slug: "meditacao-guiada",
-    image: "https://images.unsplash.com/photo-1594432003349-6b0db3a68e6c?w=600&q=80&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1594432003349-6b0db3a68e6c?w=600&q=80&auto=format&fit=crop",
   },
   {
     title: "Limpeza Energética",
@@ -63,7 +90,19 @@ const services = [
     duration: "60 minutos",
     price: 75,
     slug: "limpeza-energetica",
-    image: "https://images.unsplash.com/photo-1578603320349-84efc63a2b98?w=600&q=80&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1578603320349-84efc63a2b98?w=600&q=80&auto=format&fit=crop",
+  },
+  {
+    title: "Pack Alinhamento Total",
+    description:
+      "Programa completo: 1 Mesa Radiónica + 1 Sessão de Reiki. Transformação profunda em 2 sessões.",
+    duration: "2 sessões",
+    price: 90,
+    slug: "pack-alinhamento-total",
+    image:
+      "https://images.unsplash.com/photo-1533073526757-2c8ca94d4ad0?w=600&h=400&fit=crop",
+    isPopular: false,
   },
 ];
 
@@ -83,7 +122,10 @@ export default function ServicosPage() {
 
           <div className="col-span-12 grid grid-cols-12 gap-6">
             {services.map((service) => (
-              <div key={service.slug} className="col-span-12 md:col-span-6 lg:col-span-4">
+              <div
+                key={service.slug}
+                className="col-span-12 md:col-span-6 lg:col-span-4"
+              >
                 <ServiceCard {...service} />
               </div>
             ))}
@@ -112,7 +154,10 @@ export default function ServicosPage() {
                   desc: "Vivencia a transformação em um ambiente seguro e sagrado.",
                 },
               ].map((step, index) => (
-                <div key={index} className="col-span-12 md:col-span-4 text-center">
+                <div
+                  key={index}
+                  className="col-span-12 md:col-span-4 text-center"
+                >
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-white font-bold mb-4">
                     {step.num}
                   </div>
