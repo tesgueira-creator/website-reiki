@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <circle cx="96" cy="96" r="90" fill="#C5A059"/>
+  <circle cx="96" cy="96" r="85" fill="white"/>
+  
+  <!-- Mandala simplificada (symbol of reiki/wellness) -->
+  <circle cx="96" cy="96" r="40" fill="none" stroke="#C5A059" stroke-width="2"/>
+  <circle cx="96" cy="96" r="30" fill="none" stroke="#C5A059" stroke-width="1.5"/>
+  <circle cx="96" cy="96" r="20" fill="none" stroke="#C5A059" stroke-width="1"/>
+  
+  <!-- Petals/Energy radiating -->
+  <g stroke="#C5A059" stroke-width="2" fill="none">
+    <line x1="96" y1="56" x2="96" y2="40"/>
+    <line x1="96" y1="136" x2="96" y2="152"/>
+    <line x1="56" y1="96" x2="40" y2="96"/>
+    <line x1="136" y1="96" x2="152" y2="96"/>
+  </g>
+  
+  <!-- Center dot -->
+  <circle cx="96" cy="96" r="4" fill="#C5A059"/>
+</svg>
