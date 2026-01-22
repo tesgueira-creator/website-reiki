@@ -59,12 +59,7 @@ export function ServiceCard({
       setIsProcessing(false);
     }
   };
-  duration,
-  price,
-  image,
-  slug,
-  isPopular,
-}: ServiceCardProps) {
+
   return (
     <motion.div
       className={`rounded-2xl overflow-hidden border-2 transition-all group h-full flex flex-col ${
