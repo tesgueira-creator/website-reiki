@@ -94,6 +94,13 @@ export const serviceType = defineType({
       validation: (Rule) => Rule.min(0),
     }),
     defineField({
+      name: 'stripePriceId',
+      type: 'string',
+      title: 'Stripe Price ID',
+      description: 'ID do Price no Stripe (ex: price_1AbcXyz) — usado para checkout com price IDs',
+      validation: (Rule) => Rule.max(200),
+    }),
+    defineField({
       name: 'priceNote',
       type: 'string',
       title: 'Nota sobre Preço',
