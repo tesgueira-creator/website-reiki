@@ -228,7 +228,7 @@ export default function ReferralPage() {
                     {benefit.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
