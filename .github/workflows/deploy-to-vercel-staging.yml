@@ -25,7 +25,7 @@ jobs:
                   echo "Triggering Vercel deployment via API..."
 
                   # Call Vercel API to trigger a redeploy
-                  curl -X POST \
+                  RESPONSE=$(curl -s -X POST \
                     "https://api.vercel.com/v13/deployments?forceNew=1" \
                     -H "Authorization: Bearer ${VERCEL_TOKEN}" \
                     -H "Content-Type: application/json" \
@@ -36,4 +36,16 @@ jobs:
                         "repo": "${{ github.repository }}",
                         "type": "github"
                       }
-                    }' 2>&1 | jq '.'
+                    }')
+                  
+                  echo "Vercel API Response:"
+                  echo "${RESPONSE}" | jq '.' 2>/dev/null || echo "${RESPONSE}"
+                  
+                  # Extract deployment URL if successful
+                  DEPLOYMENT_URL=$(echo "${RESPONSE}" | jq -r '.url // empty' 2>/dev/null)
+                  if [ -n "$DEPLOYMENT_URL" ]; then
+                    echo "✓ Deployment triggered successfully"
+                    echo "Deployment URL: https://${DEPLOYMENT_URL}"
+                  else
+                    echo "ℹ Deployment request sent to Vercel"
+                  fi
