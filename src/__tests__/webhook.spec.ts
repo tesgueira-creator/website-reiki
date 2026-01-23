@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { NextRequest } from 'next/server'
 
 // Mocks
 const createIfNotExistsMock = vi.fn()
@@ -72,9 +73,9 @@ describe('Stripe webhook route', () => {
         const req = {
             arrayBuffer: async () => buf,
             headers: { get: (_: string) => '' },
-        } as unknown as Request
+        } as unknown as NextRequest
 
-        const res = await POST(req as unknown as Request)
+        const res = await POST(req as NextRequest)
 
         // Assert that Sanity createIfNotExists was called with the expected document
         expect(createIfNotExistsMock).toHaveBeenCalled()

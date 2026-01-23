@@ -20,8 +20,43 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+interface EventSchedule {
+  day: string;
+  events: string[];
+}
+
+interface EventTestimonial {
+  name: string;
+  text: string;
+  rating: number;
+}
+
+interface Event {
+  title: string;
+  description: string;
+  type: string;
+  date: string;
+  time?: string;
+  duration: string;
+  location: string;
+  address?: string;
+  isOnline: boolean;
+  price: number;
+  earlyBirdPrice?: number;
+  earlyBirdDeadline?: string;
+  spotsTotal?: number;
+  spotsLeft: number;
+  image: string;
+  instructor?: string;
+  instructorBio?: string;
+  includes: string[];
+  notIncluded?: string[];
+  schedule: EventSchedule[];
+  testimonials?: EventTestimonial[];
+}
+
 // Em produção, estes dados viriam de uma API/CMS
-const eventsData: Record<string, unknown> = {
+const eventsData: Record<string, Event> = {
   "retiro-despertar": {
     title: "Retiro de Despertar Espiritual",
     description: `Um fim de semana transformador de imersão total em práticas de meditação, Reiki e conexão com a natureza.
@@ -155,7 +190,7 @@ export default function EventoDetalhePage() {
 
   const totalPrice =
     selectedTicket === "earlybird"
-      ? event.earlyBirdPrice * quantity
+      ? (event.earlyBirdPrice || event.price) * quantity
       : event.price * quantity;
 
   return (
