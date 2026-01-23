@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { motion } from "framer-motion";
+
 import Link from "next/link";
 import { Gift, Users, Heart, Share2, Mail, MessageCircle } from "lucide-react";
 
@@ -39,11 +39,7 @@ export default function ReferralPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary/10 via-primary/5 to-white dark:from-gray-900 dark:to-gray-800 py-20 md:py-32">
         <div className="content-container text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div>
             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Gift className="text-primary" size={40} />
             </div>
@@ -55,27 +51,21 @@ export default function ReferralPage() {
               <strong className="text-primary">€15 de desconto</strong> na
               próxima sessão
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* How It Works */}
       <section className="py-16">
         <div className="content-container">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
               Como Funciona?
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Processo simples em 3 passos
             </p>
-          </motion.div>
+            </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {[
@@ -101,13 +91,9 @@ export default function ReferralPage() {
                   "Tu recebes €15 de crédito para a tua próxima sessão e o teu amigo recebe €15 de desconto na segunda sessão dele! (EXEMPLO)",
               },
             ].map((item, index) => (
-              <motion.div
+              <div
                 key={index}
                 className="text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 relative">
                   <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">
@@ -130,13 +116,7 @@ export default function ReferralPage() {
       {/* Share Section */}
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="content-container max-w-2xl">
-          <motion.div
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12">
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-center text-gray-900 dark:text-white mb-6">
               Começa a Indicar Agora
             </h2>
@@ -200,17 +180,11 @@ export default function ReferralPage() {
       {/* Benefits Section */}
       <section className="py-16">
         <div className="content-container">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
               Porquê Indicar?
             </h2>
-          </motion.div>
+            </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
@@ -239,13 +213,9 @@ export default function ReferralPage() {
                   "Partilha em segundos através de WhatsApp, email ou redes sociais. Sem complicações.",
               },
             ].map((benefit, index) => (
-              <motion.div
+              <div
                 key={index}
                 className="flex gap-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary flex-shrink-0">
                   {benefit.icon}
@@ -267,12 +237,7 @@ export default function ReferralPage() {
       {/* Terms */}
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="content-container max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <h3 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-6 text-center">
               Termos e Condições
             </h3>
@@ -313,19 +278,14 @@ export default function ReferralPage() {
                 </li>
               </ul>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-20">
         <div className="content-container text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-6">
               Tens Questões?
             </h2>
@@ -339,7 +299,7 @@ export default function ReferralPage() {
             >
               Contactar-nos
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
     </main>

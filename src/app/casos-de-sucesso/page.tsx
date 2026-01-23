@@ -129,7 +129,6 @@ const caseStudies: CaseStudy[] = [
   },
 ];
 
-
 export default function CasosSuccessPage() {
   return (
     <main className="min-h-screen">
