@@ -6,7 +6,25 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:e2e": "playwright test",
+    "validate:secrets": "node scripts/validate-secrets.js",
+    "ci": "npm run typecheck && npm run lint && npm test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.4",
+    "playwright": "^1.37.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^1.6.1"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -17,25 +35,18 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.27.2",
+    "googleapis": "^140.0.1",
     "lucide-react": "^0.562.0",
     "next": "16.1.4",
+    "next-auth": "^4.24.7",
     "next-sanity": "^11.6.12",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "resend": "^4.0.0",
     "sanity": "^4.22.0",
     "stripe": "^20.2.0",
     "styled-components": "^6.3.8",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
   }
 }

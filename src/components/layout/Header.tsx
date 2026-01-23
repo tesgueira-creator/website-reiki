@@ -24,7 +24,9 @@ export function Header() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setIsOpen(false);
+    // Close mobile menu on route change — avoid sync setState in effect to prevent cascading renders
+    const timer = setTimeout(() => setIsOpen(false), 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   // Scroll handler with throttle

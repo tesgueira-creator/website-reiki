@@ -9,6 +9,7 @@ import {
   generateLocalBusinessSchema,
   generatePersonSchema,
 } from "@/lib/metadata";
+import { Providers } from "./providers";
 
 // Fontes otimizadas com next/font (substituem importação CSS externa)
 const playfairDisplay = Playfair_Display({
@@ -80,7 +81,9 @@ export default function RootLayout({
         <SkipLink />
 
         {/* Conteúdo principal */}
-        <div id="main-content">{children}</div>
+        <Providers>
+          <div id="main-content">{children}</div>
+        </Providers>
 
         {/* Analytics (carrega após interação) */}
         <GoogleAnalytics />

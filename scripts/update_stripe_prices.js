@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Script: scripts/update_stripe_prices.js
  * Purpose: Patch Sanity `service` documents to include `stripePriceId` field

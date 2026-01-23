@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,6 +15,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
+import { DayAvailability } from "@/lib/availability";
 
 type TherapyType =
   | "reiki-kundalini"
@@ -69,17 +70,6 @@ const therapies: {
   },
 ];
 
-// Simular disponibilidade (em produção viria de uma API)
-const generateTimeSlots = (): TimeSlot[] => [
-  { time: "09:00", available: true },
-  { time: "10:00", available: true },
-  { time: "11:00", available: false },
-  { time: "14:00", available: true },
-  { time: "15:00", available: true },
-  { time: "16:00", available: false },
-  { time: "17:00", available: true },
-];
-
 export default function AgendarPage() {
   const [step, setStep] = useState(1);
   const [selectedTherapy, setSelectedTherapy] = useState<TherapyType | null>(
@@ -98,29 +88,83 @@ export default function AgendarPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [availability, setAvailability] = useState<DayAvailability[]>([]);
+  const [loadingAvailability, setLoadingAvailability] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const selectedTherapyData = therapies.find((t) => t.id === selectedTherapy);
 
-  // Gerar próximos 14 dias
-  const availableDates = Array.from({ length: 14 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() + i + 1);
-    return {
-      date: date.toISOString().split("T")[0],
-      dayName: date.toLocaleDateString("pt-PT", { weekday: "short" }),
-      dayNum: date.getDate(),
-      month: date.toLocaleDateString("pt-PT", { month: "short" }),
-      isWeekend: date.getDay() === 0 || date.getDay() === 6,
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoadingAvailability(true);
+        const res = await fetch("/api/availability");
+        const json = (await res.json()) as {
+          availability?: import("@/lib/availability").DayAvailability[];
+          error?: string;
+        };
+        if (!res.ok)
+          throw new Error(json.error || "Erro ao carregar disponibilidade");
+        setAvailability(json.availability || []);
+      } catch (err: unknown) {
+        console.error(err);
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg || "Falha a obter disponibilidade");
+      } finally {
+        setLoadingAvailability(false);
+      }
     };
-  }).filter((d) => !d.isWeekend); // Excluir fins de semana
 
-  const timeSlots = generateTimeSlots();
+    load();
+  }, []);
+
+  const selectedDay = useMemo(
+    () => availability.find((d) => d.date === selectedDate),
+    [availability, selectedDate],
+  );
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    setIsComplete(true);
+    if (!selectedTherapy || !selectedDate || !selectedTime) return;
+
+    try {
+      setError(null);
+      setIsSubmitting(true);
+
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serviceId: selectedTherapy,
+          serviceName: selectedTherapyData?.name,
+          price: selectedTherapyData?.price,
+          duration: selectedTherapyData?.duration || "90 min",
+          slug: selectedTherapy,
+          slotDate: selectedDate,
+          slotTime: selectedTime,
+          sessionType,
+          customerName: contactInfo.name,
+          customerEmail: contactInfo.email,
+          customerPhone: contactInfo.phone,
+          notes: contactInfo.notes,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || "Falha ao iniciar pagamento");
+      }
+
+      if (json.url) {
+        window.location.href = json.url as string;
+      } else {
+        setIsComplete(true);
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg || "Erro ao agendar");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isComplete) {
@@ -202,6 +246,12 @@ export default function AgendarPage() {
       <Header />
       <main className="min-h-screen pt-32 pb-24 bg-background">
         <div className="content-container max-w-4xl mx-auto">
+          {error && (
+            <div className="mb-6 p-4 rounded-xl border border-red-200 bg-red-50 text-red-700">
+              {error}
+            </div>
+          )}
+
           {/* Progress Steps */}
           <div className="flex items-center justify-center gap-4 mb-12">
             {[1, 2, 3, 4].map((s) => (
@@ -325,23 +375,31 @@ export default function AgendarPage() {
                   Selecione o dia preferido para a sua sessão
                 </p>
 
-                <div className="grid grid-cols-5 sm:grid-cols-7 gap-3 mb-8">
-                  {availableDates.map((d) => (
-                    <button
-                      key={d.date}
-                      onClick={() => setSelectedDate(d.date)}
-                      className={`p-3 rounded-xl text-center transition-all ${
-                        selectedDate === d.date
-                          ? "bg-primary text-white"
-                          : "bg-gray-50 hover:bg-primary/10"
-                      }`}
-                    >
-                      <p className="text-xs uppercase">{d.dayName}</p>
-                      <p className="text-xl font-bold">{d.dayNum}</p>
-                      <p className="text-xs">{d.month}</p>
-                    </button>
-                  ))}
-                </div>
+                {loadingAvailability && (
+                  <p className="text-sm text-gray-500">
+                    A carregar disponibilidade...
+                  </p>
+                )}
+
+                {!loadingAvailability && (
+                  <div className="grid grid-cols-5 sm:grid-cols-7 gap-3 mb-8">
+                    {availability.map((d) => (
+                      <button
+                        key={d.date}
+                        onClick={() => setSelectedDate(d.date)}
+                        className={`p-3 rounded-xl text-center transition-all ${
+                          selectedDate === d.date
+                            ? "bg-primary text-white"
+                            : "bg-gray-50 hover:bg-primary/10"
+                        }`}
+                      >
+                        <p className="text-xs uppercase">{d.dayName}</p>
+                        <p className="text-xl font-bold">{d.dayNum}</p>
+                        <p className="text-xs">{d.month}</p>
+                      </button>
+                    ))}
+                  </div>
+                )}
 
                 <div className="flex gap-4">
                   <button
@@ -383,7 +441,7 @@ export default function AgendarPage() {
                 </p>
 
                 <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-8">
-                  {timeSlots.map((slot) => (
+                  {(selectedDay?.slots || []).map((slot) => (
                     <button
                       key={slot.time}
                       onClick={() =>
@@ -402,6 +460,12 @@ export default function AgendarPage() {
                     </button>
                   ))}
                 </div>
+
+                {!selectedDay?.slots?.length && (
+                  <p className="text-sm text-gray-500">
+                    Sem horários disponíveis para esta data. Escolha outro dia.
+                  </p>
+                )}
 
                 <div className="flex gap-4">
                   <button

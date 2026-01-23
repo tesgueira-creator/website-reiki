@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Mail,
   Gift,
@@ -68,13 +69,13 @@ export default function NewsletterPage() {
               A sua subscrição foi confirmada. Verifique o seu email para
               receber o seu presente de boas-vindas.
             </p>
-            <a
+            <Link
               href="/"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-xl font-medium transition-all"
             >
               Voltar à Página Inicial
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
           </motion.div>
         </main>
         <Footer />

@@ -1,0 +1,57 @@
+name: Smoke tests and automatic rollback
+
+on:
+  workflow_run:
+    workflows: ["deploy-to-vercel"]
+    types: [completed]
+
+jobs:
+  smoke-and-rollback:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Get production deployment URL
+        id: getdeploy
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          deployUrl=$(node scripts/get-latest-deployment.js production)
+          echo "deployUrl=$deployUrl" >> $GITHUB_OUTPUT
+      - name: Run smoke tests
+        env:
+          BASE_URL: https://${{ steps.getdeploy.outputs.deployUrl }}
+        run: |
+          BASE_URL=https://${{ steps.getdeploy.outputs.deployUrl }} node scripts/smoke-test.js
+      - name: Run Playwright E2E tests
+        env:
+          BASE_URL: https://${{ steps.getdeploy.outputs.deployUrl }}
+        run: |
+          npm ci
+          npx playwright install --with-deps
+          BASE_URL=https://${{ steps.getdeploy.outputs.deployUrl }} npm run test:e2e -- --reporter=list
+      - name: On failure: Notify Slack and attempt rollback
+        if: ${{ failure() }}
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          set -e
+          echo "Posting failure to Slack..."
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            payload=$(jq -n --arg text "Smoke/E2E tests failed for deployment: https://${{ steps.getdeploy.outputs.deployUrl }}. Attempting rollback..." '{text: $text}')
+            curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL" || true
+          fi
+          echo "Attempting rollback via script"
+          node scripts/attempt-rollback.js $PRODUCTION_DOMAIN || true
+          echo "Creating issue with details"
+          node -e "const fs=require('fs'); const body=\`Smoke/E2E tests failed for deployment: https://${{ steps.getdeploy.outputs.deployUrl }}. Rollback attempted.\`; require('@actions/github').context.github.rest.issues.create({ owner: process.env.GITHUB_REPOSITORY.split('/')[0], repo: process.env.GITHUB_REPOSITORY.split('/')[1], title: 'Rollback performed after failed E2E smoke tests', body });"
+

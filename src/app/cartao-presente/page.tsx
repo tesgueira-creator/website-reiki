@@ -273,7 +273,7 @@ export default function CartaoPresentePage() {
 
                   {message && (
                     <div className="mt-4 p-3 bg-white/10 rounded-xl">
-                      <p className="text-sm italic">"{message}"</p>
+                      <p className="text-sm italic">&ldquo;{message}&rdquo;</p>
                     </div>
                   )}
                 </div>
