@@ -12,7 +12,7 @@ interface AvailabilityModalProps {
   onClose: () => void;
 }
 
-// Mock data - replace with actual API call
+// EXEMPLO - Mock data - replace with actual API call
 const mockAvailableSlots = {
   "2026-01-24": ["09:00", "10:30", "14:00", "15:30"],
   "2026-01-25": ["09:00", "11:00", "14:00", "16:00"],

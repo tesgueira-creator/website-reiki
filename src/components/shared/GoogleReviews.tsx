@@ -18,22 +18,22 @@ export function GoogleReviews({
 
   useEffect(() => {
     // TODO: Implement Google Places API integration
-    // For now, using mock data
+    // EXEMPLO - For now, using mock data
     const mockReviews = [
       {
-        author_name: "Maria Santos",
+        author_name: "(EXEMPLO) Maria Santos",
         rating: 5,
         text: "Experiência transformadora! A Rafaella é uma terapeuta incrível e muito profissional. Recomendo vivamente!",
         time: 1704067200,
       },
       {
-        author_name: "João Silva",
+        author_name: "(EXEMPLO) João Silva",
         rating: 5,
         text: "As sessões de Reiki mudaram a minha vida. Sinto-me muito mais equilibrado e em paz. Obrigado!",
         time: 1703462400,
       },
       {
-        author_name: "Ana Costa",
+        author_name: "(EXEMPLO) Ana Costa",
         rating: 5,
         text: "Profissional extremamente dedicada. O espaço é acolhedor e as terapias realmente funcionam.",
         time: 1702857600,

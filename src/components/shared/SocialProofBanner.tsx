@@ -53,17 +53,17 @@ export function SocialProofBanner() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <Stat
             number="500+"
-            label="Clientes Felizes"
+            label="(EXEMPLO) Clientes Felizes"
             icon={<Users size={32} />}
           />
           <Stat
             number="1,000+"
-            label="Sessões Realizadas"
+            label="(EXEMPLO) Sessões Realizadas"
             icon={<Calendar size={32} />}
           />
           <Stat
             number="10+"
-            label="Anos de Experiência"
+            label="(EXEMPLO) Anos de Experiência"
             icon={<Award size={32} />}
           />
         </div>
@@ -77,7 +77,7 @@ export function SocialProofBanner() {
           viewport={{ once: true }}
         >
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            ⭐ Avaliação média de 4.9/5 baseada em mais de 200 avaliações
+            ⭐ (EXEMPLO) Avaliação média de 4.9/5 baseada em mais de 200 avaliações
           </p>
         </motion.div>
       </div>

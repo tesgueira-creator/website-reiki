@@ -15,7 +15,7 @@ export function ExitIntentPopup({
   title = "Espera! Não vás ainda... 🌟",
   description = "Recebe gratuitamente o nosso guia exclusivo e começa a tua jornada de cura hoje mesmo.",
   buttonText = "Quero Receber o Guia Grátis",
-  leadMagnetTitle = "7 Técnicas de Auto-Reiki para Aliviar o Stress",
+  leadMagnetTitle = "(EXEMPLO) 7 Técnicas de Auto-Reiki para Aliviar o Stress",
 }: ExitIntentPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState("");

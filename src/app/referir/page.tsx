@@ -96,9 +96,9 @@ export default function ReferralPage() {
               {
                 step: "3",
                 icon: <Gift size={32} />,
-                title: "Recebem Ambos €15",
+                title: "(EXEMPLO) Recebem Ambos €15",
                 description:
-                  "Tu recebes €15 de crédito para a tua próxima sessão e o teu amigo recebe €15 de desconto na segunda sessão dele!",
+                  "Tu recebes €15 de crédito para a tua próxima sessão e o teu amigo recebe €15 de desconto na segunda sessão dele! (EXEMPLO)",
               },
             ].map((item, index) => (
               <motion.div

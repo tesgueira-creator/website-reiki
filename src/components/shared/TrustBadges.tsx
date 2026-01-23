@@ -59,23 +59,23 @@ export function TrustBadges() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Badge
             icon={<Award size={28} />}
-            title="Reiki Master"
+            title="(EXEMPLO) Reiki Master"
             description="Certificação Internacional em Reiki Kundalini"
           />
           <Badge
             icon={<Shield size={28} />}
-            title="Terapeuta Certificada"
+            title="(EXEMPLO) Terapeuta Certificada"
             description="Formação em Terapias Holísticas Complementares"
           />
           <Badge
             icon={<Star size={28} />}
-            title="Membro Profissional"
+            title="(EXEMPLO) Membro Profissional"
             description="Associação Portuguesa de Reiki e Terapias Energéticas"
           />
           <Badge
             icon={<CheckCircle size={28} />}
             title="Garantia de Satisfação"
-            description="100% satisfação garantida ou reembolso total"
+            description="(EXEMPLO) 100% satisfação garantida ou reembolso total"
           />
         </div>
 

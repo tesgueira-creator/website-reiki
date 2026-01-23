@@ -33,10 +33,11 @@ interface CaseStudy {
   image?: string;
 }
 
+// EXEMPLO - Replace with real case studies
 const caseStudies: CaseStudy[] = [
   {
     id: "maria-ansiedade",
-    clientName: "Maria S.",
+    clientName: "(EXEMPLO) Maria S.",
     age: "42 anos",
     issue: "Ansiedade e Insónia Crónicas",
     before:
@@ -59,7 +60,7 @@ const caseStudies: CaseStudy[] = [
   },
   {
     id: "joao-dor-cronica",
-    clientName: "João P.",
+    clientName: "(EXEMPLO) João P.",
     age: "55 anos",
     issue: "Dor Crónica nas Costas",
     before:
@@ -82,7 +83,7 @@ const caseStudies: CaseStudy[] = [
   },
   {
     id: "ana-depressao",
-    clientName: "Ana C.",
+    clientName: "(EXEMPLO) Ana C.",
     age: "38 anos",
     issue: "Depressão Pós-Parto e Fadiga Extrema",
     before:
@@ -105,7 +106,7 @@ const caseStudies: CaseStudy[] = [
   },
   {
     id: "pedro-stress",
-    clientName: "Pedro M.",
+    clientName: "(EXEMPLO) Pedro M.",
     age: "47 anos",
     issue: "Stress Extremo e Burnout Profissional",
     before:

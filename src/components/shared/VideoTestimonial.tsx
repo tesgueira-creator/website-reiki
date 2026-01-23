@@ -121,25 +121,26 @@ export function VideoTestimonial({
 
 // Grid of video testimonials
 export function VideoTestimonialsGrid() {
+  // EXEMPLO - Replace with real video testimonials
   const testimonials = [
     {
       videoUrl: "/videos/testimonial-1.mp4",
       thumbnail: "/testimonials/maria-thumbnail.jpg",
-      clientName: "Maria S.",
+      clientName: "(EXEMPLO) Maria S.",
       service: "Reiki Kundalini",
       duration: "2:15",
     },
     {
       videoUrl: "/videos/testimonial-2.mp4",
       thumbnail: "/testimonials/joao-thumbnail.jpg",
-      clientName: "João P.",
+      clientName: "(EXEMPLO) João P.",
       service: "Terapia Multidimensional",
       duration: "1:45",
     },
     {
       videoUrl: "/videos/testimonial-3.mp4",
       thumbnail: "/testimonials/ana-thumbnail.jpg",
-      clientName: "Ana C.",
+      clientName: "(EXEMPLO) Ana C.",
       service: "Mesa Radiónica",
       duration: "2:30",
     },
