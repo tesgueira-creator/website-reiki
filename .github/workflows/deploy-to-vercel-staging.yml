@@ -30,4 +30,5 @@ jobs:
               run: |
                   echo "Deploying to Vercel (staging) using Vercel CLI"
                   # Use the Vercel CLI to create a preview deployment (no --prod flag)
-                  vercel --confirm --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
+                  # Let Vercel auto-detect the project from the repo; pass token and scope (team)
+                  vercel --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --confirm
