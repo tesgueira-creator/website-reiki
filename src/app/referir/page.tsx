@@ -107,7 +107,7 @@ export default function ReferralPage() {
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                   {item.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function ReferralPage() {
                 </button>
               </div>
             </div>
-          </motion.div>
+            </div>
         </div>
       </section>
 
