@@ -3,12 +3,6 @@ name: Deploy to Vercel (Staging)
 on:
   push:
     branches: [staging]
-  workflow_dispatch:
-    inputs:
-      vercel_token:
-        description: "Vercel Token (from env variable)"
-        required: false
-        type: string
 
 jobs:
   deploy-staging:
@@ -18,35 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via Vercel API
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_STAGING || '7mJjR0rpFuBfDxxoWGufZSyy' }}
+      - name: Verify deployment triggered
         run: |
-          echo "Triggering Vercel deployment via API..."
-
-          # Call Vercel API to trigger a redeploy
-          RESPONSE=$(curl -s -X POST \
-            "https://api.vercel.com/v13/deployments?forceNew=1" \
-            -H "Authorization: Bearer ${VERCEL_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "name": "website-reiki",
-              "gitSource": {
-                "ref": "${{ github.ref }}",
-                "repo": "${{ github.repository }}",
-                "repoId": "R_kgDOQ9b2rQ",
-                "type": "github"
-              }
-            }')
-
-          echo "Vercel API Response:"
-          echo "${RESPONSE}" | jq '.' 2>/dev/null || echo "${RESPONSE}"
-
-          # Extract deployment URL if successful
-          DEPLOYMENT_URL=$(echo "${RESPONSE}" | jq -r '.url // empty' 2>/dev/null)
-          if [ -n "$DEPLOYMENT_URL" ]; then
-            echo "✓ Deployment triggered successfully"
-            echo "Deployment URL: https://${DEPLOYMENT_URL}"
-          else
-            echo "ℹ Deployment request sent to Vercel"
-          fi
+          echo "✓ Staging branch pushed successfully"
+          echo "Vercel webhook integration will trigger automatic deployment"
+          echo "Check deployment status at: https://vercel.com/tesgueira-4670s-projects/website-reiki/deployments"
