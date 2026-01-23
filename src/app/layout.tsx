@@ -4,6 +4,9 @@ import "./globals.css";
 import { SkipLink } from "@/components/shared/SkipLink";
 import { GoogleAnalytics } from "@/components/shared/Analytics";
 import { JsonLdMultiple } from "@/components/shared/JsonLd";
+import { LiveChat } from "@/components/shared/LiveChat";
+import { ExitIntentPopup } from "@/components/shared/ExitIntentPopup";
+import { DarkModeToggle } from "@/components/shared/DarkModeToggle";
 import {
   generateBaseMetadata,
   generateLocalBusinessSchema,
@@ -84,6 +87,15 @@ export default function RootLayout({
         <Providers>
           <div id="main-content">{children}</div>
         </Providers>
+
+        {/* Live Chat Widget */}
+        <LiveChat />
+
+        {/* Exit Intent Popup for Email Capture */}
+        <ExitIntentPopup />
+
+        {/* Dark Mode Toggle */}
+        <DarkModeToggle />
 
         {/* Analytics (carrega após interação) */}
         <GoogleAnalytics />

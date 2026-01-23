@@ -14,6 +14,8 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ServiceFilter, FilterOption } from "@/components/ui/ServiceFilter";
 import { WhatsAppFloatingButton } from "@/components/shared/WhatsAppButton";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import { SocialProofBanner } from "@/components/shared/SocialProofBanner";
+import { TrustBadges } from "@/components/shared/TrustBadges";
 import { Star, ArrowRight } from "lucide-react";
 import {
   fetchHomepageData,
@@ -239,6 +241,9 @@ export default function Home() {
       <main className="min-h-screen pt-16" id="main-content" role="main">
         {/* Hero Section */}
         <Hero />
+
+        {/* Social Proof Banner - NEW */}
+        <SocialProofBanner />
 
         {/* Values / Why Choose Section - ADICIONADO PARA DAR MAIS CONTEXTO */}
         <ValuesSection />
@@ -619,6 +624,9 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+
+        {/* Trust Badges Section - NEW */}
+        <TrustBadges />
 
         {/* CTA Section */}
         <CTASection />

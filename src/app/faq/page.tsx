@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { FAQSchema, defaultFAQs } from "@/components/shared/FAQSchema";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search, MessageCircle } from "lucide-react";
 import Link from "next/link";
