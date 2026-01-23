@@ -45,15 +45,27 @@ jobs:
 
                   add_env(){
                     local key="$1" value="$2" targets="$3"
-                    printf '%s' "{\"type\":\"encrypted\",\"key\":\"$key\",\"value\":\"$value\",\"target\":[$targets]}" > /tmp/payload.json
-                    # Use curl to POST, but do not echo payload to logs
-                    http_status=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST "$API_ENDPOINT" \
+                    cat > /tmp/payload.json << 'ENVJSON'
+{
+  "key": "KEY_PLACEHOLDER",
+  "value": "VALUE_PLACEHOLDER",
+  "type": "encrypted",
+  "target": [TARGETS_PLACEHOLDER]
+}
+ENVJSON
+                    # Replace placeholders
+                    sed -i "s/KEY_PLACEHOLDER/$key/g" /tmp/payload.json
+                    sed -i "s/VALUE_PLACEHOLDER/$value/g" /tmp/payload.json
+                    sed -i "s/TARGETS_PLACEHOLDER/$targets/g" /tmp/payload.json
+
+                    # Use curl to POST
+                    http_status=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST "$API_ENDPOINT?upsert=true" \
                       -H "Authorization: Bearer $VERCEL_TOKEN" \
                       -H "Content-Type: application/json" \
-                      --data-binary @/tmp/payload.json)
+                      -d @/tmp/payload.json)
                     echo "Added $key -> HTTP $http_status"
                     if [ "$http_status" -ge 400 ]; then
-                      echo "Response:" && sed -n '1,200p' /tmp/resp.json >&2
+                      echo "Response:" && cat /tmp/resp.json >&2
                       exit 1
                     fi
                   }
