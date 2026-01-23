@@ -81,7 +81,8 @@ export function ServiceFilter({
           Como se sente hoje?
         </h2>
         <p className="text-[var(--color-text-secondary)] font-light max-w-2xl mx-auto text-base leading-relaxed">
-          Selecione o seu estado atual para descobrirmos a terapia ideal para si. 
+          Selecione o seu estado atual para descobrirmos a terapia ideal para
+          si.
           <br className="hidden sm:block" />
           Cada caminho energético revela transformações profundas.
         </p>
@@ -90,19 +91,19 @@ export function ServiceFilter({
       {/* Filter Cards Grid - Modern Design with Sticky on Mobile */}
       <div className="sticky top-20 md:static z-30 bg-white/95 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none py-4 md:py-0 -mx-4 px-4 md:mx-0 md:px-0 shadow-md md:shadow-none">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filterOptions.map((option, index) => {
-          const isActive = activeFilter === option.id;
-          const Icon = option.icon;
+          {filterOptions.map((option, index) => {
+            const isActive = activeFilter === option.id;
+            const Icon = option.icon;
 
-          return (
-            <motion.button
-              key={option.id}
-              onClick={() => onFilterChange(option.id)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -8 }}
-              className={`
+            return (
+              <motion.button
+                key={option.id}
+                onClick={() => onFilterChange(option.id)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className={`
                 group relative h-44 rounded-2xl overflow-hidden 
                 border-2 transition-all duration-300 cursor-pointer
                 ${
@@ -111,76 +112,86 @@ export function ServiceFilter({
                     : "border-gray-200 hover:border-[var(--color-primary)]/50 shadow-lg hover:shadow-2xl"
                 }
               `}
-            >
-              {/* Background with gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${option.gradient}`} />
-              
-              {/* Animated overlay on hover */}
-              <div 
-                className={`absolute inset-0 transition-opacity duration-300 ${
-                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                }`}
-                style={{
-                  background: `linear-gradient(135deg, var(--color-primary)/20 0%, var(--color-primary)/10 100%)`,
-                }}
-              />
+              >
+                {/* Background with gradient */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${option.gradient}`}
+                />
 
-              {/* Floating emoji background */}
-              <div className="absolute top-2 right-2 text-4xl opacity-20 group-hover:opacity-30 transition-opacity duration-300">
-                {option.emoji}
-              </div>
+                {/* Animated overlay on hover */}
+                <div
+                  className={`absolute inset-0 transition-opacity duration-300 ${
+                    isActive
+                      ? "opacity-100"
+                      : "opacity-0 group-hover:opacity-100"
+                  }`}
+                  style={{
+                    background: `linear-gradient(135deg, var(--color-primary)/20 0%, var(--color-primary)/10 100%)`,
+                  }}
+                />
 
-              {/* Content */}
-              <div className="relative h-full flex flex-col items-center justify-center text-center p-6 space-y-3">
-                {/* Icon */}
-                <div className={`
+                {/* Floating emoji background */}
+                <div className="absolute top-2 right-2 text-4xl opacity-20 group-hover:opacity-30 transition-opacity duration-300">
+                  {option.emoji}
+                </div>
+
+                {/* Content */}
+                <div className="relative h-full flex flex-col items-center justify-center text-center p-6 space-y-3">
+                  {/* Icon */}
+                  <div
+                    className={`
                   p-3 rounded-xl transition-all duration-300
                   ${
                     isActive
                       ? "bg-[var(--color-primary)] text-white shadow-lg"
                       : `${option.bgColor} ${option.accentColor} group-hover:shadow-md`
                   }
-                `}>
-                  <Icon className="w-6 h-6" strokeWidth={2} />
-                </div>
+                `}
+                  >
+                    <Icon className="w-6 h-6" strokeWidth={2} />
+                  </div>
 
-                {/* Label */}
-                <div className="space-y-1">
-                  <h3 className={`
+                  {/* Label */}
+                  <div className="space-y-1">
+                    <h3
+                      className={`
                     font-serif font-bold text-sm transition-colors duration-300
                     ${
                       isActive
                         ? "text-[var(--color-primary)]"
                         : "text-gray-700 group-hover:text-[var(--color-primary)]"
                     }
-                  `}>
-                    {option.label}
-                  </h3>
-                  
-                  <p className={`
+                  `}
+                    >
+                      {option.label}
+                    </h3>
+
+                    <p
+                      className={`
                     text-xs font-medium transition-colors duration-300
                     ${isActive ? "text-[var(--color-primary)]/70" : "text-gray-500"}
-                  `}>
-                    {option.description}
-                  </p>
+                  `}
+                    >
+                      {option.description}
+                    </p>
+                  </div>
+
+                  {/* Active indicator dot */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute bottom-3 w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"
+                    />
+                  )}
                 </div>
 
-                {/* Active indicator dot */}
+                {/* Border glow on active */}
                 {isActive && (
-                  <motion.div
-                    layoutId="activeIndicator"
-                    className="absolute bottom-3 w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"
-                  />
+                  <div className="absolute inset-0 rounded-2xl border-2 border-[var(--color-primary)] opacity-20 animate-pulse" />
                 )}
-              </div>
-
-              {/* Border glow on active */}
-              {isActive && (
-                <div className="absolute inset-0 rounded-2xl border-2 border-[var(--color-primary)] opacity-20 animate-pulse" />
-              )}
-            </motion.button>
-          );
-        })}
+              </motion.button>
+            );
+          })}
         </div>
       </div>
 
@@ -192,7 +203,8 @@ export function ServiceFilter({
         className="text-center"
       >
         <p className="text-sm text-[var(--color-text-secondary)] font-light">
-          💫 Explore todas as terapias disponíveis ou navegue pelos seus sintomas atuais
+          💫 Explore todas as terapias disponíveis ou navegue pelos seus
+          sintomas atuais
         </p>
       </motion.div>
     </div>

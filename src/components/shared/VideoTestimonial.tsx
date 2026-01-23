@@ -107,7 +107,7 @@ export function VideoTestimonial({
       </div>
 
       {/* Client Info */}
-      <div className="p-4">
+      <div className="p-4 text-center">
         <h3 className="font-semibold text-gray-900 dark:text-white">
           {clientName}
         </h3>
