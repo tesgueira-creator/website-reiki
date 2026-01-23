@@ -77,7 +77,8 @@ export function SocialProofBanner() {
           viewport={{ once: true }}
         >
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            ⭐ (EXEMPLO) Avaliação média de 4.9/5 baseada em mais de 200 avaliações
+            ⭐ (EXEMPLO) Avaliação média de 4.9/5 baseada em mais de 200
+            avaliações
           </p>
         </motion.div>
       </div>

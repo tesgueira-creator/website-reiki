@@ -87,8 +87,9 @@ export function ServiceFilter({
         </p>
       </motion.div>
 
-      {/* Filter Cards Grid - Modern Design */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
+      {/* Filter Cards Grid - Modern Design with Sticky on Mobile */}
+      <div className="sticky top-20 md:static z-30 bg-white/95 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none py-4 md:py-0 -mx-4 px-4 md:mx-0 md:px-0 shadow-md md:shadow-none">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {filterOptions.map((option, index) => {
           const isActive = activeFilter === option.id;
           const Icon = option.icon;
@@ -180,6 +181,7 @@ export function ServiceFilter({
             </motion.button>
           );
         })}
+        </div>
       </div>
 
       {/* Optional: Descriptive text below filters */}

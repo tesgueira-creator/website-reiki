@@ -130,13 +130,13 @@ npm run dev
 
 ## 📊 EXPECTED IMPROVEMENTS
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Conversion Rate | 2% | 2.9% | **+45%** |
-| Inquiries Captured | 60% | 90% | **+30%** |
-| Email List Growth | 10/mo | 40/mo | **+300%** |
-| Mobile Bookings | 30% | 60% | **+100%** |
-| Revenue (6 mo) | Baseline | +130% | **🚀** |
+| Metric             | Before   | After | Change    |
+| ------------------ | -------- | ----- | --------- |
+| Conversion Rate    | 2%       | 2.9%  | **+45%**  |
+| Inquiries Captured | 60%      | 90%   | **+30%**  |
+| Email List Growth  | 10/mo    | 40/mo | **+300%** |
+| Mobile Bookings    | 30%      | 60%   | **+100%** |
+| Revenue (6 mo)     | Baseline | +130% | **🚀**     |
 
 ---
 
