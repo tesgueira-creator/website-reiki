@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import ReferralShare from "@/components/shared/ReferralShare";
 
 import Link from "next/link";
 import { Gift, Users, Heart, Share2, Mail, MessageCircle } from "lucide-react";

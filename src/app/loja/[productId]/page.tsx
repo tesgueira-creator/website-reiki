@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
+
+export const dynamic = 'force-dynamic';
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import Image from "next/image";
