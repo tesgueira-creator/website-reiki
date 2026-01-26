@@ -345,76 +345,76 @@ export function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-4xl shadow-2xl">
-      <div className="bg-white text-gray-900 border border-gray-200 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
-        <div className="space-y-2 flex-1">
-          <p className="text-sm font-semibold text-gray-900">
-            Utilizamos cookies para melhorar a sua experiência
+    <div className="fixed bottom-4 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 z-50 w-auto max-w-4xl shadow-2xl">
+      <div className="bg-white text-gray-900 border-2 border-primary/30 rounded-2xl p-8 sm:p-10 flex flex-col gap-6">
+        <div className="space-y-4 flex-1">
+          <p className="text-base sm:text-lg font-bold text-gray-900">
+            🍪 Utilizamos Cookies para Melhorar a Sua Experiência
           </p>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
             Usamos cookies essenciais para o site funcionar e analíticos para
             medir performance. Pode aceitar todos ou recusar analíticos. Leia a
             nossa{" "}
             <a
               href="/politica-privacidade#cookies"
-              className="text-primary underline font-medium"
+              className="text-primary underline font-semibold hover:text-primary-dark transition"
             >
               Política de Privacidade e Cookies
             </a>
             .
           </p>
-          <div className="flex items-center gap-4 text-xs text-gray-600">
-            <label className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 text-sm text-gray-700 pt-2">
+            <label className="flex items-center gap-3 cursor-pointer hover:text-primary transition">
               <input
                 type="checkbox"
-                className="accent-primary"
+                className="w-5 h-5 accent-primary cursor-pointer"
                 checked
                 readOnly
               />
-              Necessários
+              <span className="font-medium">Necessários ✓</span>
             </label>
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 cursor-pointer hover:text-primary transition">
               <input
                 type="checkbox"
-                className="accent-primary"
+                className="w-5 h-5 accent-primary cursor-pointer"
                 checked={analytics}
                 onChange={(e) => setAnalytics(e.target.checked)}
               />
-              Analíticos
+              <span className="font-medium">Analíticos</span>
             </label>
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 cursor-pointer hover:text-primary transition">
               <input
                 type="checkbox"
-                className="accent-primary"
+                className="w-5 h-5 accent-primary cursor-pointer"
                 checked={marketing}
                 onChange={(e) => setMarketing(e.target.checked)}
               />
-              Marketing
+              <span className="font-medium">Marketing</span>
             </label>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-4 w-full">
           <button
             type="button"
             onClick={() => save(false, false)}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
+            className="flex-1 px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-bold text-base hover:bg-gray-100 hover:border-gray-400 transition"
           >
-            Recusar analíticos
+            ❌ Recusar Analíticos
           </button>
           <button
             type="button"
             onClick={() => save(analytics, marketing)}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-primary text-white font-semibold shadow-md hover:bg-primary-dark transition"
+            className="flex-1 px-6 py-3 rounded-xl bg-primary text-white font-bold text-base shadow-lg hover:bg-primary-dark hover:shadow-xl transition transform hover:scale-105"
           >
-            Guardar preferências
+            💾 Guardar Preferências
           </button>
           <button
             type="button"
             onClick={() => save(true, true)}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gray-900 text-white font-semibold shadow-md hover:bg-black transition"
+            className="flex-1 px-6 py-3 rounded-xl bg-green-600 text-white font-bold text-base shadow-lg hover:bg-green-700 hover:shadow-xl transition transform hover:scale-105"
           >
-            Aceitar todos
+            ✅ Aceitar Todos
           </button>
         </div>
       </div>
