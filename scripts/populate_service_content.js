@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createClient } = require('@sanity/client');
 
 const client = createClient({
-    projectId: 'q0bdmt5v',
-    dataset: 'production',
-    token: 'sktQKCCKjfN8Wj1lnQtN3MZ2q1pYBEvYsGLNOpPxA0mMaudxN1KVhXKX7VGZpxaToB34O3wCu30qZzYVxpIBr2akATxBhLqWVpcMiSRsmbYwcu9t08CbADA1bS40EywZDjus2eHFqkDWqPmX2fO4OStorGwRR12J8K44ELLUq0htA77NcEGf',
-    apiVersion: '2026-01-22',
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'q0bdmt5v',
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    token: process.env.SANITY_API_TOKEN || process.env.SANITY_WRITE_TOKEN || undefined,
+    apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2026-01-22',
     useCdn: false
 });
 

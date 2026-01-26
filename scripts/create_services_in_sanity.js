@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Script: scripts/create_services_in_sanity.js
  * Purpose: Create or update `service` documents in Sanity using the hardcoded services

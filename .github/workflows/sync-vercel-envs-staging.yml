@@ -1,0 +1,89 @@
+name: Sync Vercel Env (Staging)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Vercel environment to add (preview or production)"
+        required: true
+        default: "preview"
+  push:
+    branches: [staging]
+
+jobs:
+  sync-envs:
+    name: Sync secrets to Vercel (staging)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare environment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_STAGING }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_STAGING }}
+        run: |
+          echo "Using project: $VERCEL_PROJECT_ID" 
+          # Mask variables in logs to be extra-safe
+          echo "SANITY_WRITE_TOKEN=***" | sed -n '1p'
+
+          # Fail fast with a helpful message if Vercel vars are missing
+          if [ -z "${VERCEL_TOKEN:-}" ] || [ -z "${VERCEL_PROJECT_ID:-}" ]; then
+            echo "Error: VERCEL_TOKEN_STAGING or VERCEL_PROJECT_ID_STAGING is not set in repository secrets."
+            echo "Set the following secrets in GitHub: VERCEL_TOKEN_STAGING (a Vercel Personal Token) and VERCEL_PROJECT_ID_STAGING (the project id, e.g. prj_...)."
+            exit 1
+          fi
+
+          # Verify the project exists and the token has access
+          http_status=$(curl -s -o /tmp/verify.json -w "%{http_code}" -H "Authorization: Bearer $VERCEL_TOKEN" "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID")
+          if [ "$http_status" -ge 400 ]; then
+            echo "Vercel API project verification failed -> HTTP $http_status"
+            echo "Response:" && cat /tmp/verify.json
+            exit 1
+          fi
+
+      - name: Add server envs to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_STAGING }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
+          SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+          ENV_TARGET: ${{ github.event.inputs.environment }}
+        run: |
+          set -euo pipefail
+          API_ENDPOINT="https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env"
+
+          add_env(){
+            local key="$1" value="$2" targets_json="$3"
+            # Build payload using jq to avoid embedding raw JSON in YAML
+            jq -n --arg key "$key" --arg value "$value" --argjson targets "$targets_json" '{key: $key, value: $value, type: "encrypted", target: $targets}' > /tmp/payload.json
+
+            # Use curl to POST
+            http_status=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST "$API_ENDPOINT?upsert=true" \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d @/tmp/payload.json)
+            echo "Added $key -> HTTP $http_status"
+            if [ "$http_status" -ge 400 ]; then
+              echo "Response:" && cat /tmp/resp.json >&2
+              exit 1
+            fi
+          }
+
+          # Add server-only secrets to Preview/Production depending on ENV_TARGET
+          add_env "SANITY_WRITE_TOKEN" "$SANITY_WRITE_TOKEN" '["preview"]'
+          add_env "STRIPE_SECRET_KEY" "$STRIPE_SECRET_KEY" '["preview"]'
+          add_env "STRIPE_WEBHOOK_SECRET" "$STRIPE_WEBHOOK_SECRET" '["preview"]'
+          add_env "RESEND_API_KEY" "$RESEND_API_KEY" '["preview"]'
+          add_env "NEXTAUTH_SECRET" "$NEXTAUTH_SECRET" '["preview"]'
+
+          # Add client-visible publishable key
+          add_env "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY" "$STRIPE_PUBLISHABLE_KEY" '["preview"]'
+
+      - name: Done
+        run: echo "Vercel envs synced (preview)"

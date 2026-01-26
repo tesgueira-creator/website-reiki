@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
 import {
   User,
   Calendar,
@@ -70,32 +71,112 @@ const clientData = {
 
 type TabId = "dashboard" | "appointments" | "history" | "orders" | "settings";
 
+type Appointment = {
+  _id?: string
+  date?: string
+  startTime?: string
+  endTime?: string
+  serviceName?: string
+  status?: string
+  mode?: string
+  cancelToken?: string
+}
+
+type Order = {
+  id: string
+  date?: string
+  total?: number
+  status?: string
+}
+
 export default function ClienteAreaPage() {
+  const { data: session, status } = useSession();
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loadingAppointments, setLoadingAppointments] = useState(false);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const ordersEnabled = false; // bloquear encomendas até termos produtos reais
+  const displayName =
+    session?.user?.name || session?.user?.email || clientData.name;
+  const upcomingAppointments = useMemo(
+    () =>
+      appointments.filter((apt) => {
+        const dateTime = new Date(`${apt.date}T${apt.startTime || "00:00"}:00`);
+        return apt.status !== "canceled" && dateTime >= new Date();
+      }),
+    [appointments],
+  );
+  const pastAppointments = useMemo(
+    () =>
+      appointments.filter((apt) => {
+        const dateTime = new Date(`${apt.date}T${apt.startTime || "00:00"}:00`);
+        return apt.status !== "canceled" && dateTime < new Date();
+      }),
+    [appointments],
+  );
 
-  // Login simulado - Credenciais de teste
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    const loadAppointments = async () => {
+      try {
+        setLoadingAppointments(true);
+        const res = await fetch("/api/appointments/by-email", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        const json = (await res.json()) as {
+          appointments?: Appointment[];
+          error?: string;
+        };
+        if (!res.ok)
+          throw new Error(json.error || "Falha ao obter agendamentos");
+        setAppointments(json.appointments || []);
+        setActionMessage(null);
+      } catch (err: unknown) {
+        if (status === "authenticated") {
+          const msg = err instanceof Error ? err.message : String(err);
+          setActionMessage(msg || "Erro ao carregar agendamentos");
+        }
+      } finally {
+        setLoadingAppointments(false);
+      }
+    };
 
-    // Validar credenciais de teste
-    const validEmail = "tomas.esgueira@reiki.com";
-    const validPassword = "Reiki@2026";
-
-    if (
-      loginForm.email === validEmail &&
-      loginForm.password === validPassword
-    ) {
-      setIsLoggedIn(true);
-    } else {
-      alert(
-        "Credenciais inválidas. Use:\nEmail: tomas.esgueira@reiki.com\nPassword: Reiki@2026",
-      );
+    if (status === "authenticated") {
+      loadAppointments();
     }
-  };
+  }, [status]);
 
-  if (!isLoggedIn) {
+  useEffect(() => {
+    const loadOrders = async () => {
+      if (!ordersEnabled || status !== "authenticated") return;
+      try {
+        setLoadingOrders(true);
+        const res = await fetch("/api/orders", { method: "GET" });
+        const json = await res.json();
+        if (!res.ok)
+          throw new Error(
+            json.error || json.message || "Falha ao obter encomendas",
+          );
+        if (json.enabled === false) {
+          setActionMessage(json.message || "Encomendas bloqueadas no momento");
+          setOrders([]);
+        } else {
+          setOrders(json.orders || []);
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setActionMessage(msg || "Erro ao carregar encomendas");
+      } finally {
+        setLoadingOrders(false);
+      }
+    };
+
+    loadOrders();
+  }, [ordersEnabled, status]);
+
+  if (status !== "authenticated") {
     return (
       <>
         <Header />
@@ -118,54 +199,26 @@ export default function ClienteAreaPage() {
                 </p>
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={loginForm.email}
-                    onChange={(e) =>
-                      setLoginForm({ ...loginForm, email: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                    placeholder="email@exemplo.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Palavra-passe
-                  </label>
-                  <input
-                    type="password"
-                    value={loginForm.password}
-                    onChange={(e) =>
-                      setLoginForm({ ...loginForm, password: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
-                    placeholder="••••••••"
-                  />
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      className="rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <span className="text-gray-600">Lembrar-me</span>
-                  </label>
-                  <a href="#" className="text-primary hover:underline">
-                    Esqueceu a senha?
-                  </a>
-                </div>
+              <div className="space-y-3">
                 <button
-                  type="submit"
+                  onClick={() => signIn("google")}
                   className="w-full bg-primary text-white py-4 rounded-xl font-semibold hover:bg-primary-dark transition-all shadow-lg"
                 >
-                  Entrar
+                  Entrar com Google
                 </button>
-              </form>
+                <button
+                  onClick={() => signIn()}
+                  className="w-full border-2 border-gray-200 text-gray-700 py-4 rounded-xl font-semibold hover:border-primary hover:text-primary transition-all"
+                >
+                  Entrar com Email
+                </button>
+
+                {actionMessage && (
+                  <p className="text-sm text-red-600 text-center">
+                    {actionMessage}
+                  </p>
+                )}
+              </div>
 
               <div className="mt-6 text-center">
                 <p className="text-gray-500 text-sm">
@@ -176,26 +229,6 @@ export default function ClienteAreaPage() {
                   >
                     Agende a sua primeira sessão
                   </Link>
-                </p>
-              </div>
-
-              {/* Credenciais de Teste */}
-              <div className="mt-8 pt-6 border-t border-gray-100">
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-                  <p className="text-xs font-semibold text-blue-900 mb-2 flex items-center gap-2">
-                    <span>🔑</span> Credenciais de Teste
-                  </p>
-                  <div className="space-y-1 text-xs text-blue-800">
-                    <p>
-                      <strong>Email:</strong> tomas.esgueira@reiki.com
-                    </p>
-                    <p>
-                      <strong>Password:</strong> Reiki@2026
-                    </p>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-400 text-center">
-                  🔒 Os seus dados estão protegidos por encriptação SSL
                 </p>
               </div>
             </motion.div>
@@ -239,11 +272,17 @@ export default function ClienteAreaPage() {
       <Header />
       <main className="min-h-screen pt-32 pb-24 bg-background">
         <div className="content-container">
+          {actionMessage && (
+            <div className="mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-800">
+              {actionMessage}
+            </div>
+          )}
+
           {/* Welcome Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
               <h1 className="font-serif text-3xl font-bold text-gray-900 mb-1">
-                Olá, {clientData.name.split(" ")[0]}! ✨
+                Olá, {displayName.split(" ")[0]}! ✨
               </h1>
               <p className="text-gray-500">Bem-vinda à sua área pessoal</p>
             </div>
@@ -255,7 +294,7 @@ export default function ClienteAreaPage() {
                 Nova Marcação
               </Link>
               <button
-                onClick={() => setIsLoggedIn(false)}
+                onClick={() => signOut()}
                 className="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors"
               >
                 <LogOut className="w-5 h-5" />
@@ -438,36 +477,74 @@ export default function ClienteAreaPage() {
                     Agendamentos Futuros
                   </h3>
                   <div className="space-y-4">
-                    {clientData.upcomingAppointments.map((apt) => (
+                    {upcomingAppointments.length === 0 && (
+                      <p className="text-gray-500 text-sm">
+                        Sem agendamentos futuros. Agende uma nova sessão.
+                      </p>
+                    )}
+                    {upcomingAppointments.map((apt) => (
                       <div
-                        key={apt.id}
+                        key={apt._id}
                         className="flex items-center justify-between p-4 rounded-xl bg-gray-50"
                       >
                         <div className="flex items-center gap-4">
                           <div className="text-center">
                             <p className="text-2xl font-bold text-primary">
-                              {apt.date.split(" ")[0]}
+                              {apt.date}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {apt.date.split(" ")[1]}
+                              {apt.startTime}
                             </p>
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">
-                              {apt.therapy}
+                              {apt.serviceName}
                             </p>
-                            <p className="text-sm text-gray-500">{apt.time}</p>
+                            <p className="text-sm text-gray-500">
+                              {apt.mode === "online" ? "Online" : "Presencial"}
+                            </p>
                           </div>
                         </div>
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            apt.status === "confirmado"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-amber-100 text-amber-700"
-                          }`}
-                        >
-                          {apt.status}
-                        </span>
+                        {apt.cancelToken ? (
+                          <button
+                            onClick={async () => {
+                              try {
+                                const res = await fetch(
+                                  "/api/appointments/cancel",
+                                  {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                      cancelToken: apt.cancelToken,
+                                    }),
+                                  },
+                                );
+                                if (!res.ok)
+                                  throw new Error("Falha ao cancelar");
+                                setAppointments((prev) =>
+                                  prev.map((a) =>
+                                    a._id === apt._id
+                                      ? { ...a, status: "canceled" }
+                                      : a,
+                                  ),
+                                );
+                                setActionMessage("Agendamento cancelado");
+                              } catch (err: unknown) {
+                                const msg = err instanceof Error ? err.message : String(err);
+                                setActionMessage(msg || "Erro ao cancelar");
+                              }
+                            }}
+                            className="px-3 py-2 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
+                          >
+                            Cancelar
+                          </button>
+                        ) : (
+                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                            Confirmado
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -480,23 +557,26 @@ export default function ClienteAreaPage() {
                     Histórico de Sessões
                   </h3>
                   <div className="space-y-4">
-                    {clientData.pastSessions.map((session) => (
+                    {pastAppointments.length === 0 && (
+                      <p className="text-gray-500 text-sm">
+                        Sem histórico ainda.
+                      </p>
+                    )}
+                    {pastAppointments.map((session) => (
                       <div
-                        key={session.id}
+                        key={session._id}
                         className="flex items-center justify-between p-4 rounded-xl bg-gray-50"
                       >
                         <div>
                           <p className="font-medium text-gray-900">
-                            {session.therapy}
+                            {session.serviceName}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {session.date}
+                            {session.date} às {session.startTime}
                           </p>
                         </div>
                         <div className="flex items-center gap-1 text-amber-500">
-                          {[...Array(session.rating)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-current" />
-                          ))}
+                          <Star className="w-4 h-4" />
                         </div>
                       </div>
                     ))}
@@ -509,35 +589,66 @@ export default function ClienteAreaPage() {
                   <h3 className="font-semibold text-gray-900 mb-6">
                     As Minhas Encomendas
                   </h3>
-                  <div className="space-y-4">
-                    {clientData.orders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="flex items-center justify-between p-4 rounded-xl bg-gray-50"
+                  {!ordersEnabled && (
+                    <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 mb-4 text-sm">
+                      Encomendas estarão disponíveis quando o catálogo real
+                      estiver online. Neste momento o fluxo está bloqueado para
+                      evitar pedidos fictícios.
+                    </div>
+                  )}
+
+                  {ordersEnabled && (
+                    <>
+                      {loadingOrders && (
+                        <p className="text-sm text-gray-500">
+                          A carregar encomendas...
+                        </p>
+                      )}
+                      {!loadingOrders && orders.length === 0 && (
+                        <p className="text-sm text-gray-500">
+                          Sem encomendas ainda.
+                        </p>
+                      )}
+                      {!loadingOrders && orders.length > 0 && (
+                        <div className="space-y-4">
+                          {orders.map((order) => (
+                            <div
+                              key={order.id}
+                              className="flex items-center justify-between p-4 rounded-xl bg-gray-50"
+                            >
+                              <div>
+                                <p className="font-medium text-gray-900">
+                                  {order.id}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  {order.date}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-bold text-gray-900">
+                                  {order.total}€
+                                </p>
+                                <span className="text-xs text-green-600 font-medium">
+                                  {order.status}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <Link
+                        href="/loja"
+                        className={`block text-center font-medium mt-6 ${
+                          ordersEnabled
+                            ? "text-primary hover:underline"
+                            : "text-gray-400 pointer-events-none"
+                        }`}
+                        aria-disabled={!ordersEnabled}
                       >
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            {order.id}
-                          </p>
-                          <p className="text-sm text-gray-500">{order.date}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-gray-900">
-                            {order.total}€
-                          </p>
-                          <span className="text-xs text-green-600 font-medium">
-                            {order.status}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <Link
-                    href="/loja"
-                    className="block text-center text-primary font-medium mt-6 hover:underline"
-                  >
-                    Visitar Loja →
-                  </Link>
+                        Visitar Loja →
+                      </Link>
+                    </>
+                  )}
                 </div>
               )}
 

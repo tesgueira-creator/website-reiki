@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui/SectionTitle";
+import { FAQSchema, defaultFAQs } from "@/components/shared/FAQSchema";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Search, MessageCircle } from "lucide-react";
 import Link from "next/link";
@@ -236,7 +237,7 @@ export default function FAQPage() {
             {filteredFaqs.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 mb-4">
-                  Nenhuma pergunta encontrada para "{searchQuery}"
+                  Nenhuma pergunta encontrada para &ldquo;{searchQuery}&rdquo;
                 </p>
                 <button
                   onClick={() => setSearchQuery("")}

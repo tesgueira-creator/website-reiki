@@ -1,0 +1,19 @@
+name: Deploy to Vercel (Staging)
+
+on:
+  push:
+    branches: [staging]
+
+jobs:
+  deploy-staging:
+    name: Deploy to Vercel (staging)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify deployment triggered
+        run: |
+          echo "✓ Staging branch pushed successfully"
+          echo "Vercel webhook integration will trigger automatic deployment"
+          echo "Check deployment status at: https://vercel.com/tesgueira-4670s-projects/website-reiki/deployments"

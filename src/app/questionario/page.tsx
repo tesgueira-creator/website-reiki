@@ -19,6 +19,10 @@ import {
   Target,
 } from "lucide-react";
 import Link from "next/link";
+import {
+  scheduleCtaClass,
+  scheduleSecondaryCtaClass,
+} from "@/components/ui/buttonStyles";
 
 interface QuestionOption {
   value: string;
@@ -294,14 +298,14 @@ export default function QuestionarioPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/servicos"
-                className="inline-flex items-center justify-center bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-dark transition-all shadow-lg"
+                className={`${scheduleSecondaryCtaClass} justify-center px-8 py-4`}
               >
                 Ver Serviços
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
               <Link
                 href="/contacto"
-                className="inline-flex items-center justify-center border-2 border-gray-300 bg-white text-gray-700 px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all"
+                className={`${scheduleCtaClass} justify-center px-8 py-4`}
               >
                 Agendar Sessão
               </Link>
@@ -321,7 +325,7 @@ export default function QuestionarioPage() {
     <>
       <Header />
       <main className="min-h-screen pt-32 pb-24 bg-gradient-to-b from-background to-white">
-        <div className="content-container max-w-3xl mx-auto">
+        <div className="content-container max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between text-sm text-gray-500 mb-2">
@@ -347,7 +351,7 @@ export default function QuestionarioPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100"
+              className="bg-white p-12 md:p-16 rounded-3xl shadow-xl border border-gray-100"
             >
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {currentQuestion.question}
@@ -504,43 +508,35 @@ export default function QuestionarioPage() {
                 )}
 
               {/* Navigation */}
-              <div className="flex justify-between mt-10">
+              <div className="flex justify-between gap-4 mt-12">
                 <button
                   onClick={handleBack}
-                  disabled={currentStep === 0}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                    currentStep === 0
-                      ? "text-gray-300 cursor-not-allowed"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                  disabled={currentStep === 0 || isSubmitting}
+                  className={`${scheduleSecondaryCtaClass} gap-2 px-8 py-4 font-bold ${currentStep === 0 || isSubmitting ? "opacity-40 cursor-not-allowed" : "hover:shadow-lg"}`}
                 >
-                  <ArrowLeft className="w-5 h-5" />
+                  <ArrowLeft className="w-6 h-6" />
                   Anterior
                 </button>
 
                 <button
                   onClick={handleNext}
                   disabled={!canProceed() || isSubmitting}
-                  className={`flex items-center gap-2 px-8 py-3 rounded-xl font-semibold transition-all ${
-                    canProceed()
-                      ? "bg-primary text-white hover:bg-primary-dark shadow-lg hover:shadow-xl"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
+                  className={`${scheduleCtaClass} gap-2 px-10 py-4 font-bold text-lg ${!canProceed() || isSubmitting ? "opacity-40 cursor-not-allowed" : "hover:shadow-lg"}`}
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       A enviar...
                     </>
                   ) : currentStep === questions.length - 1 ? (
                     <>
                       Enviar
-                      <Send className="w-5 h-5" />
+                      <Send className="w-6 h-6" />
                     </>
                   ) : (
                     <>
                       Próxima
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-6 h-6" />
                     </>
                   )}
                 </button>

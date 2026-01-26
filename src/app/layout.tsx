@@ -2,13 +2,20 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import { SkipLink } from "@/components/shared/SkipLink";
-import { GoogleAnalytics } from "@/components/shared/Analytics";
+import {
+  GoogleAnalytics,
+  CookieConsent,
+  ClarityScript,
+} from "@/components/shared/Analytics";
 import { JsonLdMultiple } from "@/components/shared/JsonLd";
+import { LiveChat } from "@/components/shared/LiveChat";
+import { ExitIntentPopup } from "@/components/shared/ExitIntentPopup";
 import {
   generateBaseMetadata,
   generateLocalBusinessSchema,
   generatePersonSchema,
 } from "@/lib/metadata";
+import { Providers } from "./providers";
 
 // Fontes otimizadas com next/font (substituem importação CSS externa)
 const playfairDisplay = Playfair_Display({
@@ -80,10 +87,20 @@ export default function RootLayout({
         <SkipLink />
 
         {/* Conteúdo principal */}
-        <div id="main-content">{children}</div>
+        <Providers>
+          <div id="main-content">{children}</div>
+        </Providers>
 
-        {/* Analytics (carrega após interação) */}
+        {/* Consent + Analytics/Heatmap (carregam apenas após consentimento) */}
+        <CookieConsent />
         <GoogleAnalytics />
+        <ClarityScript />
+
+        {/* Live Chat Widget */}
+        <LiveChat />
+
+        {/* Exit Intent Popup for Email Capture */}
+        <ExitIntentPopup />
       </body>
     </html>
   );

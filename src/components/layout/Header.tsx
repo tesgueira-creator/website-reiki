@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
+import { scheduleCtaClass } from "@/components/ui/buttonStyles";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -24,7 +25,9 @@ export function Header() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setIsOpen(false);
+    // Close mobile menu on route change — avoid sync setState in effect to prevent cascading renders
+    const timer = setTimeout(() => setIsOpen(false), 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   // Scroll handler with throttle
@@ -130,18 +133,32 @@ export function Header() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:flex justify-end">
-          <Link
-            href="/contacto"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-full font-medium text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        <div className="hidden md:flex justify-end gap-3">
+          <a
+            href="tel:+351912345678"
+            className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary px-4 py-2 rounded-full font-medium text-sm transition-all shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            aria-label="Ligar agora"
           >
             <Phone size={16} />
+            Ligar
+          </a>
+          <Link
+            href="/contacto"
+            className={`${scheduleCtaClass} text-sm px-5 py-2.5`}
+          >
             Agendar
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex justify-end md:hidden col-start-3">
+        {/* Mobile: Tap to Call Button (always visible on small screens) */}
+        <div className="flex md:hidden justify-end col-start-3 gap-2">
+          <a
+            href="tel:+351912345678"
+            className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white w-10 h-10 rounded-full transition-all shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            aria-label="Ligar agora"
+          >
+            <Phone size={18} />
+          </a>
           <button
             className="text-primary hover:text-primary-dark transition-colors p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             onClick={() => setIsOpen(!isOpen)}
@@ -214,7 +231,7 @@ export function Header() {
                 >
                   <Link
                     href="/contacto"
-                    className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-6 py-4 rounded-full font-semibold transition-all w-full shadow-lg"
+                    className={`${scheduleCtaClass} w-full justify-center text-base`}
                     onClick={() => setIsOpen(false)}
                   >
                     <Phone size={20} />

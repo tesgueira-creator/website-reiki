@@ -53,11 +53,11 @@ export default function PoliticaPrivacidadePage() {
               ou com terceiros, exceto quando exigido por lei.
             </p>
 
-            <h3>5. Cookies</h3>
+            <h3 id="cookies">5. Cookies</h3>
             <p>
-              O nosso site usa cookies para melhorar a experiência do
-              utilizador. Ao continuar a navegar no nosso site, concorda com o
-              uso de cookies.
+              O nosso site usa cookies essenciais para funcionar e cookies
+              analíticos (opcionais) para medir performance. Pode gerir o seu
+              consentimento no banner de cookies a qualquer momento.
             </p>
 
             <h3>6. Direitos do Utilizador</h3>

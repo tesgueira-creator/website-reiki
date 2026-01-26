@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, DollarSign, CreditCard } from "lucide-react";
 import { useState } from "react";
+import { trackCTAClick } from "@/components/shared/Analytics";
 
 interface ServiceCardProps {
   title: string;
@@ -31,6 +32,8 @@ export function ServiceCard({
 
   const handlePayment = async () => {
     setIsProcessing(true);
+
+    trackCTAClick("Agendar e Pagar (card)", slug || title);
 
     try {
       const response = await fetch("/api/checkout", {
@@ -83,14 +86,16 @@ export function ServiceCard({
             />
             {/* Enhanced gradient overlay with animated shimmer */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-60 group-hover:opacity-70 transition-opacity duration-300" />
-            
+
             {/* Shine effect on hover */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 opacity-0 group-hover:opacity-100" />
           </>
         ) : (
           <div className="h-full bg-gradient-to-br from-[var(--color-primary)]/20 to-[var(--color-secondary)]/30 flex items-center justify-center flex-col gap-3">
             <span className="text-6xl opacity-30">✨</span>
-            <span className="text-sm text-gray-500 font-semibold">Imagem em breve</span>
+            <span className="text-sm text-gray-500 font-semibold">
+              Imagem em breve
+            </span>
           </div>
         )}
 
@@ -125,13 +130,15 @@ export function ServiceCard({
         {/* Info Cards - Enhanced */}
         <div className="grid grid-cols-2 gap-4 py-5 border-t border-b border-gray-200 group-hover:border-[var(--color-primary)]/20 transition-colors">
           {/* Duration Card */}
-          <motion.div 
+          <motion.div
             whileHover={{ y: -4 }}
             className="bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-[var(--color-primary)]/8 group-hover:to-[var(--color-primary)]/3 rounded-xl p-4 transition-all duration-300 text-center border border-gray-100 group-hover:border-[var(--color-primary)]/20"
           >
             <div className="flex items-center justify-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-gray-500 group-hover:text-[var(--color-primary)] transition-colors" />
-              <span className="text-xs text-gray-600 font-bold tracking-wide uppercase">Duração</span>
+              <span className="text-xs text-gray-600 font-bold tracking-wide uppercase">
+                Duração
+              </span>
             </div>
             <span className="text-sm font-bold text-gray-800 group-hover:text-[var(--color-primary)] transition-colors">
               {duration}
@@ -139,13 +146,15 @@ export function ServiceCard({
           </motion.div>
 
           {/* Price Card */}
-          <motion.div 
+          <motion.div
             whileHover={{ y: -4 }}
             className="bg-gradient-to-br from-[var(--color-primary)]/15 to-[var(--color-primary)]/5 rounded-xl p-4 transition-all duration-300 text-center border border-[var(--color-primary)]/20 group-hover:from-[var(--color-primary)]/20 group-hover:to-[var(--color-primary)]/10 group-hover:border-[var(--color-primary)]/40"
           >
             <div className="flex items-center justify-center gap-2 mb-2">
               <DollarSign className="w-4 h-4 text-[var(--color-primary)]" />
-              <span className="text-xs text-[var(--color-primary)] font-bold tracking-wide uppercase">Investimento</span>
+              <span className="text-xs text-[var(--color-primary)] font-bold tracking-wide uppercase">
+                Investimento
+              </span>
             </div>
             <span className="font-serif text-2xl font-bold text-[var(--color-primary)]">
               {price}€
@@ -158,12 +167,13 @@ export function ServiceCard({
           {/* Info Button */}
           <Link
             href={slug ? `/servicos/${slug}` : "/servicos"}
+            onClick={() => trackCTAClick("Ver Detalhes (card)", slug || title)}
             className="group/btn flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-gray-100 to-gray-50 hover:from-gray-200 hover:to-gray-100 text-gray-700 hover:text-gray-900 px-5 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 shadow-sm hover:shadow-md border border-gray-200 hover:border-gray-300"
           >
             Ver Detalhes
-            <ArrowRight 
-              size={16} 
-              className="transition-all group-hover/btn:translate-x-1 duration-300" 
+            <ArrowRight
+              size={16}
+              className="transition-all group-hover/btn:translate-x-1 duration-300"
             />
           </Link>
 

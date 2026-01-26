@@ -20,8 +20,43 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+interface EventSchedule {
+  day: string;
+  events: string[];
+}
+
+interface EventTestimonial {
+  name: string;
+  text: string;
+  rating: number;
+}
+
+interface Event {
+  title: string;
+  description: string;
+  type: string;
+  date: string;
+  time?: string;
+  duration: string;
+  location: string;
+  address?: string;
+  isOnline: boolean;
+  price: number;
+  earlyBirdPrice?: number;
+  earlyBirdDeadline?: string;
+  spotsTotal?: number;
+  spotsLeft: number;
+  image: string;
+  instructor?: string;
+  instructorBio?: string;
+  includes: string[];
+  notIncluded?: string[];
+  schedule: EventSchedule[];
+  testimonials?: EventTestimonial[];
+}
+
 // Em produção, estes dados viriam de uma API/CMS
-const eventsData: Record<string, any> = {
+const eventsData: Record<string, Event> = {
   "retiro-despertar": {
     title: "Retiro de Despertar Espiritual",
     description: `Um fim de semana transformador de imersão total em práticas de meditação, Reiki e conexão com a natureza.
@@ -155,7 +190,7 @@ export default function EventoDetalhePage() {
 
   const totalPrice =
     selectedTicket === "earlybird"
-      ? event.earlyBirdPrice * quantity
+      ? (event.earlyBirdPrice || event.price) * quantity
       : event.price * quantity;
 
   return (
@@ -282,24 +317,29 @@ export default function EventoDetalhePage() {
                     Programa
                   </h2>
                   <div className="space-y-6">
-                    {event.schedule.map((day: any, index: number) => (
-                      <div key={index}>
-                        <h3 className="font-semibold text-primary mb-3">
-                          {day.day}
-                        </h3>
-                        <ul className="space-y-2">
-                          {day.events.map((e: string, i: number) => (
-                            <li
-                              key={i}
-                              className="flex items-start gap-3 text-gray-600"
-                            >
-                              <Check className="w-4 h-4 text-green-500 mt-1 shrink-0" />
-                              {e}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+                    {event.schedule.map(
+                      (
+                        day: { day: string; events: string[] },
+                        index: number,
+                      ) => (
+                        <div key={index}>
+                          <h3 className="font-semibold text-primary mb-3">
+                            {day.day}
+                          </h3>
+                          <ul className="space-y-2">
+                            {day.events.map((e: string, i: number) => (
+                              <li
+                                key={i}
+                                className="flex items-start gap-3 text-gray-600"
+                              >
+                                <Check className="w-4 h-4 text-green-500 mt-1 shrink-0" />
+                                {e}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </motion.div>
               )}
