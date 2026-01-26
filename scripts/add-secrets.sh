@@ -88,6 +88,8 @@ fi
 NEXTAUTH_SECRET=$(ask_secret "NEXTAUTH_SECRET")
 VERCEL_TOKEN=$(ask_secret "VERCEL_TOKEN")
 VERCEL_PROJECT_ID=$(ask_secret "VERCEL_PROJECT_ID")
+# Optional org id used by some automation (set both plain and _STAGING names)
+VERCEL_ORG_ID=$(ask_secret "VERCEL_ORG_ID" false)
 PRODUCTION_DOMAIN=$(ask_secret "PRODUCTION_DOMAIN" false)
 SLACK_WEBHOOK_URL=$(ask_secret "SLACK_WEBHOOK_URL" false)
 STRIPE_PUBLISHABLE_KEY=$(ask_secret "STRIPE_PUBLISHABLE_KEY" false)
@@ -101,8 +103,15 @@ set_secret "RESEND_API_KEY" "$RESEND_API_KEY" "$ENV_FLAG"
 set_secret "GOOGLE_SERVICE_ACCOUNT_EMAIL" "$GOOGLE_SERVICE_ACCOUNT_EMAIL" "$ENV_FLAG"
 set_secret "GOOGLE_SERVICE_ACCOUNT_KEY" "$GOOGLE_SERVICE_ACCOUNT_KEY_BASE64" "$ENV_FLAG"
 set_secret "NEXTAUTH_SECRET" "$NEXTAUTH_SECRET" "$ENV_FLAG"
+# Set Vercel tokens both as generic names and as staging-specific names used in workflows
 set_secret "VERCEL_TOKEN" "$VERCEL_TOKEN" "$ENV_FLAG"
+set_secret "VERCEL_TOKEN_STAGING" "$VERCEL_TOKEN" "$ENV_FLAG"
 set_secret "VERCEL_PROJECT_ID" "$VERCEL_PROJECT_ID" "$ENV_FLAG"
+set_secret "VERCEL_PROJECT_ID_STAGING" "$VERCEL_PROJECT_ID" "$ENV_FLAG"
+if [ -n "$VERCEL_ORG_ID" ]; then
+  set_secret "VERCEL_ORG_ID" "$VERCEL_ORG_ID" "$ENV_FLAG"
+  set_secret "VERCEL_ORG_ID_STAGING" "$VERCEL_ORG_ID" "$ENV_FLAG"
+fi
 set_secret "PRODUCTION_DOMAIN" "$PRODUCTION_DOMAIN" "$ENV_FLAG"
 set_secret "SLACK_WEBHOOK_URL" "$SLACK_WEBHOOK_URL" "$ENV_FLAG"
 if [ -n "$STRIPE_PUBLISHABLE_KEY" ]; then
