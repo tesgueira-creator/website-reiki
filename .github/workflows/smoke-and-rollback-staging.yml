@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Get staging deployment URL
         id: getdeploy
         env:
@@ -36,7 +36,7 @@ jobs:
           npm ci
           npx playwright install --with-deps
           BASE_URL=https://${{ steps.getdeploy.outputs.deployUrl }} npm run test:e2e -- --reporter=list
-      - name: On failure: Notify Slack and attempt rollback (staging)
+      - name: "On failure: Notify Slack and attempt rollback (staging)"
         if: ${{ failure() }}
         env:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
