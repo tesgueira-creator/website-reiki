@@ -3,6 +3,10 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
+import {
+  scheduleCtaClass,
+  scheduleSecondaryCtaClass,
+} from "@/components/ui/buttonStyles";
 
 export function CTASection() {
   return (
@@ -26,7 +30,7 @@ export function CTASection() {
           <h2 className="font-serif text-4xl md:text-6xl font-bold text-text-main mb-6">
             Comece a Sua Jornada Hoje
           </h2>
-          <p className="text-text-secondary text-lg md:text-xl mb-10 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-text-secondary text-lg md:text-xl mb-10 leading-relaxed max-w-2xl mx-auto text-center">
             Está pronto para experienciar transformação, cura e reequilíbrio
             energético? Agende a sua primeira sessão hoje e descubra o poder de
             reconectar-se com a sua essência.
@@ -35,7 +39,7 @@ export function CTASection() {
           <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mt-6">
             <Link
               href="/contacto"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white px-10 py-5 rounded-full font-semibold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1"
+              className={`${scheduleCtaClass} text-lg px-10 py-5`}
             >
               <Phone size={20} />
               Agendar Agora
@@ -44,7 +48,7 @@ export function CTASection() {
               href="https://wa.me/351912345678?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20as%20terapias"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 border-2 border-primary bg-white hover:bg-primary text-primary hover:text-white px-10 py-5 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl"
+              className={`${scheduleSecondaryCtaClass} text-lg px-10 py-5`}
             >
               <MessageCircle size={20} />
               Falar no WhatsApp

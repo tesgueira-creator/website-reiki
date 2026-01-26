@@ -9,17 +9,25 @@ interface GoogleReviewsProps {
   maxReviews?: number;
 }
 
+interface GoogleReview {
+  author_name: string;
+  rating: number;
+  text: string;
+  time: number;
+  id?: string;
+}
+
 export function GoogleReviews({
   placeId = "YOUR_GOOGLE_PLACE_ID",
   maxReviews = 5,
 }: GoogleReviewsProps) {
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<GoogleReview[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // TODO: Implement Google Places API integration
     // EXEMPLO - For now, using mock data
-    const mockReviews = [
+    const mockReviews: GoogleReview[] = [
       {
         author_name: "(EXEMPLO) Maria Santos",
         rating: 5,

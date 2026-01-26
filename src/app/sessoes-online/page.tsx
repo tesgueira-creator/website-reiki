@@ -150,7 +150,7 @@ export default function SessoesOnlinePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-gray-600 max-w-2xl mx-auto mb-8"
+              className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 text-center"
             >
               A energia curativa não conhece fronteiras. Experiencie terapias
               transformadoras no conforto da sua casa.

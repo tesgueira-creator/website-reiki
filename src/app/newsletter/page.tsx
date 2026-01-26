@@ -102,7 +102,7 @@ export default function NewsletterPage() {
               <h1 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 Junte-se à Nossa Comunidade
               </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto text-center">
                 Receba meditações guiadas, dicas de bem-estar e ofertas
                 exclusivas diretamente no seu email.
               </p>

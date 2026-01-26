@@ -171,7 +171,7 @@ export default function CasosSuccessPage() {
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-6">
               A Tua História de Transformação Começa Aqui
             </h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto text-center">
               Se te identificaste com alguma destas histórias, sabes que a
               mudança é possível. Dá o primeiro passo hoje.
             </p>

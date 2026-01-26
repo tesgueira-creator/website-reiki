@@ -80,7 +80,7 @@ export function ServiceFilter({
         <h2 className="text-3xl md:text-4xl font-serif text-[var(--color-text-dark)] font-bold">
           Como se sente hoje?
         </h2>
-        <p className="text-[var(--color-text-secondary)] font-light max-w-2xl mx-auto text-base leading-relaxed">
+        <p className="text-[var(--color-text-secondary)] font-light max-w-2xl mx-auto text-base leading-relaxed text-center">
           Selecione o seu estado atual para descobrirmos a terapia ideal para
           si.
           <br className="hidden sm:block" />

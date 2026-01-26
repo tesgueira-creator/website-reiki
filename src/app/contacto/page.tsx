@@ -3,12 +3,14 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   Mail,
   Phone,
   MapPin,
   Clock,
   MessageCircle,
+  Clipboard,
   Send,
   CheckCircle,
   AlertCircle,
@@ -21,6 +23,10 @@ import {
   trackWhatsAppClick,
   trackPhoneClick,
 } from "@/components/shared/Analytics";
+import {
+  scheduleCtaClass,
+  scheduleSecondaryCtaClass,
+} from "@/components/ui/buttonStyles";
 
 interface FormErrors {
   name?: string;
@@ -45,6 +51,11 @@ export default function ContactoPage() {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [quickQuiz, setQuickQuiz] = useState({
+    goal: "",
+    urgency: "",
+    modality: "",
+  });
   const formStartTracked = useRef(false);
 
   useEffect(() => {
@@ -56,6 +67,46 @@ export default function ContactoPage() {
       formStartTracked.current = true;
     }
   }, [formData]);
+
+  const handleQuickSelect = (field: keyof typeof quickQuiz, value: string) => {
+    setQuickQuiz((prev) => ({
+      ...prev,
+      [field]: prev[field] === value ? "" : value,
+    }));
+  };
+
+  const hasQuickSelection = Object.values(quickQuiz).some(Boolean);
+
+  const buildQuickSummary = () => {
+    const details = [] as string[];
+    if (quickQuiz.goal) details.push(`Objetivo: ${quickQuiz.goal}`);
+    if (quickQuiz.urgency) details.push(`Urgência: ${quickQuiz.urgency}`);
+    if (quickQuiz.modality) details.push(`Preferência: ${quickQuiz.modality}`);
+
+    return details.length
+      ? `Questionário rápido:
+${details.join(" | ")}`
+      : "Questionário rápido ainda sem preferências selecionadas.";
+  };
+
+  const applyQuickQuizToForm = () => {
+    const summary = buildQuickSummary();
+    setFormData((prev) => ({
+      ...prev,
+      subject: prev.subject || "agendamento",
+      message: prev.message ? `${prev.message}\n\n${summary}` : summary,
+    }));
+  };
+
+  const questionarioParams = new URLSearchParams();
+  if (quickQuiz.goal) questionarioParams.set("goal", quickQuiz.goal);
+  if (quickQuiz.urgency) questionarioParams.set("urgency", quickQuiz.urgency);
+  if (quickQuiz.modality)
+    questionarioParams.set("modality", quickQuiz.modality);
+
+  const questionarioHref = questionarioParams.toString().length
+    ? `/questionario?${questionarioParams.toString()}`
+    : "/questionario";
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -212,6 +263,17 @@ export default function ContactoPage() {
       accentColor: "text-green-600",
       bgColor: "bg-green-100",
     },
+    {
+      icon: Clipboard,
+      title: "Questionário",
+      info: "Método alternativo",
+      description: "Responder ao questionário completo",
+      href: "/questionario",
+      bgGradient: "from-indigo-50 to-violet-50",
+      borderColor: "border-indigo-200",
+      accentColor: "text-indigo-600",
+      bgColor: "bg-indigo-100",
+    },
   ];
 
   return (
@@ -235,7 +297,7 @@ export default function ContactoPage() {
             <h1 className="font-serif text-5xl md:text-6xl font-bold text-text-main mb-6">
               Vou Adorar Ouvir de Si
             </h1>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto text-center">
               Tem dúvidas ou gostaria de agendar uma sessão? Contacte-me através
               de qualquer dos canais abaixo.
             </p>
@@ -252,7 +314,7 @@ export default function ContactoPage() {
                   target={contact.external ? "_blank" : undefined}
                   rel={contact.external ? "noopener noreferrer" : undefined}
                   onClick={contact.onClick}
-                  className={`col-span-12 md:col-span-6 lg:col-span-4 bg-gradient-to-br ${contact.bgGradient} p-8 rounded-2xl border-2 ${contact.borderColor} hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer overflow-hidden relative`}
+                  className={`col-span-12 md:col-span-6 lg:col-span-4 bg-gradient-to-br ${contact.bgGradient} p-10 rounded-2xl border-2 ${contact.borderColor} hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer overflow-hidden relative`}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -262,13 +324,17 @@ export default function ContactoPage() {
                 >
                   {/* Background decoration */}
                   <div className="absolute top-0 right-0 w-32 h-32 opacity-20 group-hover:opacity-30 transition-opacity">
-                    <div className={`w-full h-full rounded-full blur-3xl ${contact.bgColor}`} />
+                    <div
+                      className={`w-full h-full rounded-full blur-3xl ${contact.bgColor}`}
+                    />
                   </div>
-                  
+
                   {/* Content */}
                   <div className="relative z-10">
                     {/* Icon with background */}
-                    <div className={`${contact.bgColor} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                    <div
+                      className={`${contact.bgColor} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}
+                    >
                       <Icon
                         className={`${contact.accentColor}`}
                         size={32}
@@ -282,7 +348,9 @@ export default function ContactoPage() {
                     </h3>
 
                     {/* Info - Main */}
-                    <p className={`${contact.accentColor} font-semibold text-lg mb-2 group-hover:underline break-all`}>
+                    <p
+                      className={`${contact.accentColor} font-semibold text-lg mb-2 group-hover:underline break-all`}
+                    >
                       {contact.info}
                     </p>
 
@@ -292,18 +360,154 @@ export default function ContactoPage() {
                     </p>
 
                     {/* Action Button */}
-                    <div className={`inline-flex items-center gap-2 ${contact.accentColor} font-medium text-sm group-hover:translate-x-1 transition-transform`}>
+                    <div
+                      className={`inline-flex items-center gap-2 ${contact.accentColor} font-medium text-sm group-hover:translate-x-1 transition-transform`}
+                    >
                       <span>Contactar Agora</span>
                       <span>→</span>
                     </div>
                   </div>
 
                   {/* Border glow on hover */}
-                  <div className={`absolute inset-0 rounded-2xl border-2 ${contact.borderColor} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                  <div
+                    className={`absolute inset-0 rounded-2xl border-2 ${contact.borderColor} opacity-0 group-hover:opacity-100 transition-opacity`}
+                  />
                 </motion.a>
               );
             })}
           </div>
+
+          {/* Quick Contact Questionnaire */}
+          <motion.div
+            className="col-span-12 grid grid-cols-12 gap-6 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <div className="col-span-12 lg:col-span-8 bg-white rounded-2xl border border-gray-100 shadow-sm p-10">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-8">
+                <div>
+                  <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-2">
+                    Questionário rápido
+                  </p>
+                  <h3 className="font-serif text-3xl font-bold text-gray-900 leading-tight">
+                    Prefere começar por algumas respostas rápidas?
+                  </h3>
+                  <p className="text-text-secondary mt-2">
+                    Em menos de 60 segundos defina o que procura e aplicamos
+                    automaticamente no formulário ou siga para o questionário
+                    completo.
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold">
+                  <Loader2 size={16} className="animate-spin" />
+                  60s
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  {
+                    key: "goal" as const,
+                    title: "O que procura?",
+                    options: [
+                      "Agendar uma terapia específica",
+                      "Sugestão personalizada",
+                      "Saber preços/packs",
+                    ],
+                  },
+                  {
+                    key: "urgency" as const,
+                    title: "Quando quer começar?",
+                    options: [
+                      "Esta semana",
+                      "Próximos 15 dias",
+                      "Sem urgência definida",
+                    ],
+                  },
+                  {
+                    key: "modality" as const,
+                    title: "Formato preferido",
+                    options: ["Online", "Presencial em Lisboa", "Híbrido"],
+                  },
+                ].map((section) => (
+                  <div key={section.key} className="space-y-3">
+                    <p className="text-sm font-semibold text-gray-800">
+                      {section.title}
+                    </p>
+                    <div className="space-y-2">
+                      {section.options.map((option) => {
+                        const selected = quickQuiz[section.key] === option;
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() =>
+                              handleQuickSelect(section.key, option)
+                            }
+                            aria-pressed={selected}
+                            className={`w-full text-left border-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
+                              selected
+                                ? "border-primary bg-primary/5 text-primary shadow-sm"
+                                : "border-gray-200 hover:border-primary/60 hover:bg-gray-50"
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 mt-10">
+                <button
+                  type="button"
+                  onClick={applyQuickQuizToForm}
+                  className={`${scheduleSecondaryCtaClass} justify-center font-bold py-4 px-6 text-base hover:shadow-lg transition-shadow ${!hasQuickSelection ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={!hasQuickSelection}
+                >
+                  ✓ Aplicar no formulário
+                </button>
+                <Link
+                  href={questionarioHref}
+                  className={`${scheduleCtaClass} justify-center font-bold py-4 px-6 text-base hover:shadow-lg transition-shadow`}
+                >
+                  📋 Responder questionário completo
+                </Link>
+              </div>
+            </div>
+
+            <div className="col-span-12 lg:col-span-4 bg-gradient-to-br from-primary/5 to-purple-50 border border-primary/10 rounded-2xl p-10 shadow-sm">
+              <h4 className="font-serif text-2xl font-bold text-gray-900 mb-4">
+                Resumo instantâneo
+              </h4>
+              <div className="space-y-3 text-sm text-gray-700">
+                <div className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span>
+                    {quickQuiz.goal || "Objetivo ainda não selecionado"}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span>{quickQuiz.urgency || "Urgência em aberto"}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-primary">•</span>
+                  <span>
+                    {quickQuiz.modality || "Formato preferido por definir"}
+                  </span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-6">
+                Aplicamos estas escolhas diretamente no formulário abaixo ou, se
+                preferir, seguimos para o questionário holístico completo.
+              </p>
+            </div>
+          </motion.div>
 
           {/* Form & Info Grid */}
           <div className="col-span-12 grid grid-cols-12 gap-6">
@@ -326,7 +530,8 @@ export default function ContactoPage() {
                   Envie-nos uma mensagem
                 </h2>
                 <p className="text-gray-600 text-lg">
-                  Responderemos no prazo mais breve possível com propostas personalizadas.
+                  Responderemos no prazo mais breve possível com propostas
+                  personalizadas.
                 </p>
               </motion.div>
 
@@ -344,7 +549,8 @@ export default function ContactoPage() {
                     <div>
                       <p className="font-semibold text-green-900">Sucesso!</p>
                       <span className="text-green-700 text-sm">
-                        Mensagem enviada com sucesso! Entrarei em contacto em breve.
+                        Mensagem enviada com sucesso! Entrarei em contacto em
+                        breve.
                       </span>
                     </div>
                   </motion.div>
@@ -361,13 +567,19 @@ export default function ContactoPage() {
                     </div>
                     <div>
                       <p className="font-semibold text-red-900">Erro</p>
-                      <span className="text-red-700 text-sm">{errorMessage}</span>
+                      <span className="text-red-700 text-sm">
+                        {errorMessage}
+                      </span>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6" noValidate>
+              <form
+                onSubmit={handleSubmit}
+                className="bg-white p-10 rounded-2xl border border-gray-100 shadow-sm space-y-8"
+                noValidate
+              >
                 {/* Honeypot */}
                 <div className="hidden" aria-hidden="true">
                   <input
@@ -395,9 +607,9 @@ export default function ContactoPage() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     required
-                    className={`w-full px-4 py-3 border-2 rounded-lg outline-none transition focus:ring-2 ${
-                      errors.name 
-                        ? "border-red-300 bg-red-50 focus:ring-red-100" 
+                    className={`w-full px-5 py-4 border-2 rounded-lg outline-none transition focus:ring-2 text-base ${
+                      errors.name
+                        ? "border-red-300 bg-red-50 focus:ring-red-100"
                         : "border-gray-200 focus:ring-primary/20 focus:border-primary bg-gray-50 hover:bg-white"
                     }`}
                     placeholder="O seu nome"
@@ -424,9 +636,9 @@ export default function ContactoPage() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     required
-                    className={`w-full px-4 py-3 border-2 rounded-lg outline-none transition focus:ring-2 ${
-                      errors.email 
-                        ? "border-red-300 bg-red-50 focus:ring-red-100" 
+                    className={`w-full px-5 py-4 border-2 rounded-lg outline-none transition focus:ring-2 text-base ${
+                      errors.email
+                        ? "border-red-300 bg-red-50 focus:ring-red-100"
                         : "border-gray-200 focus:ring-primary/20 focus:border-primary bg-gray-50 hover:bg-white"
                     }`}
                     placeholder="o.seu@email.com"
@@ -444,7 +656,9 @@ export default function ContactoPage() {
                     className="block text-sm font-semibold text-gray-800 mb-3"
                   >
                     Telefone{" "}
-                    <span className="text-gray-500 font-normal">(opcional)</span>
+                    <span className="text-gray-500 font-normal">
+                      (opcional)
+                    </span>
                   </label>
                   <input
                     type="tel"
@@ -453,9 +667,9 @@ export default function ContactoPage() {
                     value={formData.phone}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={`w-full px-4 py-3 border-2 rounded-lg outline-none transition focus:ring-2 ${
-                      errors.phone 
-                        ? "border-red-300 bg-red-50 focus:ring-red-100" 
+                    className={`w-full px-5 py-4 border-2 rounded-lg outline-none transition focus:ring-2 text-base ${
+                      errors.phone
+                        ? "border-red-300 bg-red-50 focus:ring-red-100"
                         : "border-gray-200 focus:ring-primary/20 focus:border-primary bg-gray-50 hover:bg-white"
                     }`}
                     placeholder="+351 912 345 678"
@@ -481,9 +695,9 @@ export default function ContactoPage() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     required
-                    className={`w-full px-4 py-3 border-2 rounded-lg outline-none transition focus:ring-2 ${
-                      errors.subject 
-                        ? "border-red-300 bg-red-50 focus:ring-red-100" 
+                    className={`w-full px-5 py-4 border-2 rounded-lg outline-none transition focus:ring-2 text-base ${
+                      errors.subject
+                        ? "border-red-300 bg-red-50 focus:ring-red-100"
                         : "border-gray-200 focus:ring-primary/20 focus:border-primary bg-gray-50 hover:bg-white"
                     }`}
                   >
@@ -520,9 +734,9 @@ export default function ContactoPage() {
                     onBlur={handleBlur}
                     required
                     rows={5}
-                    className={`w-full px-4 py-3 border-2 rounded-lg outline-none transition focus:ring-2 resize-none ${
-                      errors.message 
-                        ? "border-red-300 bg-red-50 focus:ring-red-100" 
+                    className={`w-full px-5 py-4 border-2 rounded-lg outline-none transition focus:ring-2 resize-none text-base ${
+                      errors.message
+                        ? "border-red-300 bg-red-50 focus:ring-red-100"
                         : "border-gray-200 focus:ring-primary/20 focus:border-primary bg-gray-50 hover:bg-white"
                     }`}
                     placeholder="Descreva como posso ajudá-lo(a)..."
@@ -541,17 +755,17 @@ export default function ContactoPage() {
                 <motion.button
                   type="submit"
                   disabled={status === "submitting"}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary-dark hover:to-purple-700 disabled:from-primary/50 disabled:to-purple-600/50 disabled:cursor-not-allowed text-white py-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-2xl hover:shadow-3xl text-lg"
+                  whileHover={{ scale: 1.04, y: -4 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="w-full bg-gradient-to-r from-primary via-primary to-purple-600 hover:from-primary-dark hover:via-primary-dark hover:to-purple-700 disabled:from-primary/40 disabled:to-purple-600/40 disabled:cursor-not-allowed text-white py-5 px-6 rounded-xl font-bold transition-all flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl text-lg border-2 border-primary/50 hover:border-primary-dark"
                 >
                   {status === "submitting" ? (
                     <>
-                      <Loader2 className="animate-spin" size={22} /> A enviar...
+                      <Loader2 className="animate-spin" size={24} /> A enviar...
                     </>
                   ) : (
                     <>
-                      <Send size={22} /> Enviar Mensagem
+                      <Send size={24} /> Enviar Mensagem
                     </>
                   )}
                 </motion.button>
@@ -587,7 +801,11 @@ export default function ContactoPage() {
                 </div>
                 <div className="space-y-3">
                   {[
-                    { day: "Segunda a Sexta", time: "09:00 - 18:00", icon: "📅" },
+                    {
+                      day: "Segunda a Sexta",
+                      time: "09:00 - 18:00",
+                      icon: "📅",
+                    },
                     { day: "Sábado", time: "10:00 - 14:00", icon: "🌟" },
                     { day: "Domingo", time: "Fechado", icon: "🌙" },
                   ].map((schedule, index) => (
@@ -629,12 +847,16 @@ export default function ContactoPage() {
                 </div>
                 <div className="space-y-4">
                   <p className="text-gray-700 leading-relaxed">
-                    <span className="text-lg">📍</span> Sessões presenciais, remotas por videochamada ou híbridas conforme sua preferência.
+                    <span className="text-lg">📍</span> Sessões presenciais,
+                    remotas por videochamada ou híbridas conforme sua
+                    preferência.
                   </p>
                   <div className="bg-white/60 p-4 rounded-lg border border-blue-100">
                     <p className="text-sm text-gray-600">
-                      <span className="font-bold text-blue-600">Endereço:</span><br/>
-                      Rua das Terapias, Lisboa<br/>
+                      <span className="font-bold text-blue-600">Endereço:</span>
+                      <br />
+                      Rua das Terapias, Lisboa
+                      <br />
                       Portugal
                     </p>
                   </div>
@@ -689,7 +911,9 @@ export default function ContactoPage() {
                       className="bg-white/60 p-3 rounded-lg hover:bg-white transition-colors border border-purple-100"
                     >
                       <div className="flex items-start gap-3">
-                        <span className="text-xl flex-shrink-0">{faq.icon}</span>
+                        <span className="text-xl flex-shrink-0">
+                          {faq.icon}
+                        </span>
                         <div>
                           <p className="font-bold text-gray-800 text-sm">
                             {faq.title}

@@ -28,10 +28,10 @@ export function Footer() {
 
             {/* CTA Principal no Footer */}
             <Link
-              href="/contacto"
+              href="/agendar"
               className="mb-6 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-full font-semibold text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              Agendar Consulta
+              Agendar agora
             </Link>
 
             <div className="flex gap-4">
@@ -205,7 +205,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-gray-400">
               <li>
                 <Link
-                  href="/servicos/reiki"
+                  href="/servicos/reiki-kundalini"
                   className="hover:text-primary transition inline-block"
                 >
                   Reiki Kundalini
@@ -213,7 +213,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/servicos/aura"
+                  href="/servicos/leitura-aura"
                   className="hover:text-primary transition inline-block"
                 >
                   Leitura de Aura
@@ -221,7 +221,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/servicos/holistico"
+                  href="/servicos/cura-holistica"
                   className="hover:text-primary transition inline-block"
                 >
                   Cura Holística
@@ -229,7 +229,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/servicos/consultoria"
+                  href="/servicos/limpeza-energetica"
                   className="hover:text-primary transition inline-block"
                 >
                   Limpeza Energética
@@ -289,6 +289,12 @@ export function Footer() {
               className="hover:text-white transition"
             >
               Termos de Uso
+            </Link>
+            <Link
+              href="/politica-privacidade#cookies"
+              className="hover:text-white transition"
+            >
+              Cookies & Consentimento
             </Link>
           </div>
         </div>

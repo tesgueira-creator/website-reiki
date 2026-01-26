@@ -3,6 +3,13 @@
 import { useEffect } from "react";
 import Script from "next/script";
 
+declare global {
+  interface Window {
+    Tawk_API?: Record<string, unknown>;
+    Tawk_LoadStart?: Date;
+  }
+}
+
 /**
  * Tawk.to Live Chat Integration
  * Free live chat widget for instant customer support
@@ -12,9 +19,7 @@ export function LiveChat() {
   useEffect(() => {
     // Initialize Tawk.to when component mounts
     if (typeof window !== "undefined") {
-      // @ts-ignore
       window.Tawk_API = window.Tawk_API || {};
-      // @ts-ignore
       window.Tawk_LoadStart = new Date();
     }
   }, []);

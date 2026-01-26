@@ -3,6 +3,10 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  scheduleCtaClass,
+  scheduleSecondaryCtaClass,
+} from "@/components/ui/buttonStyles";
 
 export function Hero() {
   return (
@@ -21,8 +25,8 @@ export function Hero() {
 
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-         {/* Main Sage Blob */}
-         <motion.div
+        {/* Main Sage Blob */}
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.2, scale: 1 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
@@ -30,10 +34,10 @@ export function Hero() {
         />
         {/* Secondary Gold Blob */}
         <motion.div
-           initial={{ opacity: 0, x: 20 }}
-           animate={{ opacity: 0.15, x: 0 }}
-           transition={{ duration: 2, delay: 0.5 }}
-           className="absolute top-[15%] right-[8%] w-[500px] h-[500px] rounded-full bg-primary/25 blur-[100px]"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 0.15, x: 0 }}
+          transition={{ duration: 2, delay: 0.5 }}
+          className="absolute top-[15%] right-[8%] w-[500px] h-[500px] rounded-full bg-primary/25 blur-[100px]"
         />
       </div>
 
@@ -48,31 +52,44 @@ export function Hero() {
             <span className="inline-block text-secondary uppercase tracking-[0.25em] text-xs md:text-sm mb-2 font-bold bg-secondary/10 px-5 py-2.5 rounded-full backdrop-blur-sm border border-secondary/20">
               Rafaella Kally — Terapeuta Holística
             </span>
-            
+
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-foreground mb-6 leading-[1.05] tracking-tight">
               Cura emocional e <br />
               <span className="text-primary italic relative inline-block mt-2">
                 conexão espiritual
-                <svg className="absolute w-full h-3 -bottom-2 left-0 text-primary/30 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                  <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+                <svg
+                  className="absolute w-full h-3 -bottom-2 left-0 text-primary/30 -z-10"
+                  viewBox="0 0 100 10"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M0 5 Q 50 10 100 5"
+                    stroke="currentColor"
+                    strokeWidth="8"
+                    fill="none"
+                  />
                 </svg>
               </span>
             </h1>
-            
+
             <p className="text-gray-600 text-lg md:text-xl lg:text-2xl mb-12 leading-relaxed font-light">
-              Redescubra a sua harmonia interior através do <span className="font-medium text-foreground">Reiki Kundalini</span> e terapias holísticas integrativas.
+              Redescubra a sua harmonia interior através do{" "}
+              <span className="font-medium text-foreground">
+                Reiki Kundalini
+              </span>{" "}
+              e terapias holísticas integrativas.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-6">
               <Link
                 href="/contacto"
-                className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white min-w-[220px] h-16 rounded-full text-lg font-semibold transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] duration-300 px-8"
+                className={`${scheduleCtaClass} min-w-[220px] h-16 text-lg px-8`}
               >
                 Agendar Consulta
               </Link>
               <Link
                 href="/servicos"
-                className="inline-flex items-center justify-center border-2 border-secondary/40 bg-white/60 backdrop-blur-sm text-secondary hover:bg-secondary hover:text-white hover:border-secondary min-w-[220px] h-16 rounded-full text-lg font-medium transition-all duration-300 px-8"
+                className={`${scheduleSecondaryCtaClass} border-secondary text-secondary hover:text-white min-w-[220px] h-16 text-lg px-8`}
               >
                 Conhecer Terapias
               </Link>

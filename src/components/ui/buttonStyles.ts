@@ -1,0 +1,5 @@
+export const scheduleCtaClass = "inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-dark text-white px-7 sm:px-8 py-3.5 rounded-full font-semibold text-base shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed";
+
+export const scheduleSecondaryCtaClass = "inline-flex items-center justify-center gap-2 border-2 border-primary bg-white text-primary px-7 sm:px-8 py-3.5 rounded-full font-semibold text-base transition-all shadow-sm hover:shadow-md hover:bg-primary/5 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed";
+
+export const scheduleGhostLinkClass = "inline-flex items-center justify-center gap-2 text-primary font-semibold tracking-wide uppercase text-xs sm:text-sm border-b-2 border-primary/60 hover:border-primary hover:text-primary-dark transition-colors";

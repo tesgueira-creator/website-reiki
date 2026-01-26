@@ -23,6 +23,11 @@ import {
   type Testimonial,
   type Author,
 } from "@/lib/sanity-queries";
+import {
+  scheduleCtaClass,
+  scheduleSecondaryCtaClass,
+  scheduleGhostLinkClass,
+} from "@/components/ui/buttonStyles";
 
 // Fallback data (mockup) com copywriting profissional - NOVA ESTRUTURA
 const FALLBACK_SERVICES = [
@@ -203,6 +208,30 @@ export default function Home() {
       ? services
       : services.filter((service) => service.category === activeFilter);
 
+  const serviceOverviews = [
+    {
+      key: "diagnosis",
+      title: "Diagnóstico Energético",
+      description: "Mesa Radiónica e leituras para identificar bloqueios.",
+      icon: "🧭",
+    },
+    {
+      key: "energy-healing",
+      title: "Reequilíbrio e Energia",
+      description: "Sessões de Reiki e técnicas para restaurar vitalidade.",
+      icon: "⚡",
+    },
+    {
+      key: "package",
+      title: "Programas Completos",
+      description: "Combinações de terapias com melhor valor e acompanhamento.",
+      icon: "📦",
+    },
+  ].map((item) => ({
+    ...item,
+    count: services.filter((service) => service.category === item.key).length,
+  }));
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -305,13 +334,70 @@ export default function Home() {
             </div>
 
             <div className="col-span-12 mt-12 text-center">
-              <Link
-                href="/servicos"
-                className="inline-block border-b-2 border-[var(--color-primary)] text-[var(--color-text-dark)] pb-1 hover:text-[var(--color-primary)] transition-colors text-sm uppercase tracking-widest font-semibold"
-              >
+              <Link href="/servicos" className={scheduleGhostLinkClass}>
                 Ver Tabela Comparativa Completa
               </Link>
             </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="col-span-12 mt-10 bg-white border border-gray-100 rounded-3xl shadow-xl p-8 md:p-10 grid grid-cols-12 gap-6 items-start"
+            >
+              <div className="col-span-12 lg:col-span-5 space-y-4">
+                <p className="text-xs font-semibold tracking-[0.25em] text-primary uppercase">
+                  Ver todos os serviços
+                </p>
+                <h3 className="font-serif text-3xl md:text-4xl font-bold text-[var(--color-text-dark)] leading-tight">
+                  Explore a lista completa e escolha em menos de 2 minutos.
+                </h3>
+                <p className="text-[var(--color-text-secondary)] text-base leading-relaxed">
+                  Compare preços, duração e objetivos num único olhar. Se
+                  preferir, agendamos uma primeira consulta para orientar a
+                  melhor terapia para si.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <Link
+                    href="/contacto"
+                    className={`${scheduleCtaClass} justify-center text-base px-8 py-4`}
+                  >
+                    Agendar Consulta de Orientação
+                  </Link>
+                  <Link
+                    href="/servicos"
+                    className={`${scheduleSecondaryCtaClass} justify-center text-base px-8 py-4`}
+                  >
+                    Ver todos os serviços
+                  </Link>
+                </div>
+              </div>
+
+              <div className="col-span-12 lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-4">
+                {serviceOverviews.map((item) => (
+                  <div
+                    key={item.key}
+                    className="border border-gray-100 rounded-2xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm hover:shadow-lg transition-all"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-2xl" aria-hidden>
+                        {item.icon}
+                      </span>
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary">
+                        {item.count || services.length} opções
+                      </span>
+                    </div>
+                    <p className="font-semibold text-[var(--color-text-dark)] mb-2">
+                      {item.title}
+                    </p>
+                    <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
 
@@ -498,7 +584,7 @@ export default function Home() {
             >
               <Link
                 href="/contacto"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-[var(--color-text-dark)] to-gray-800 text-white px-10 py-5 rounded-full font-semibold text-lg hover:from-[var(--color-primary)] hover:to-[var(--color-primary-dark)] transition-all duration-300 shadow-2xl hover:shadow-[var(--color-primary)]/30 hover:-translate-y-1 group"
+                className={`${scheduleCtaClass} text-lg px-10 py-5`}
               >
                 Agendar Primeira Consulta
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
+import { scheduleCtaClass } from "@/components/ui/buttonStyles";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -143,7 +144,7 @@ export function Header() {
           </a>
           <Link
             href="/contacto"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-full font-medium text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className={`${scheduleCtaClass} text-sm px-5 py-2.5`}
           >
             Agendar
           </Link>
@@ -230,7 +231,7 @@ export function Header() {
                 >
                   <Link
                     href="/contacto"
-                    className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-6 py-4 rounded-full font-semibold transition-all w-full shadow-lg"
+                    className={`${scheduleCtaClass} w-full justify-center text-base`}
                     onClick={() => setIsOpen(false)}
                   >
                     <Phone size={20} />

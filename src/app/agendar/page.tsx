@@ -16,6 +16,11 @@ import {
   Phone,
 } from "lucide-react";
 import { DayAvailability } from "@/lib/availability";
+import {
+  trackBookingStep,
+  trackCheckoutError,
+  trackCheckoutSuccess,
+} from "@/components/shared/Analytics";
 
 type TherapyType =
   | "reiki-kundalini"
@@ -95,6 +100,13 @@ export default function AgendarPage() {
   const selectedTherapyData = therapies.find((t) => t.id === selectedTherapy);
 
   useEffect(() => {
+    trackBookingStep(`step_${step}`, {
+      therapy: selectedTherapy || "none",
+      sessionType,
+    });
+  }, [step, selectedTherapy, sessionType]);
+
+  useEffect(() => {
     const load = async () => {
       try {
         setLoadingAvailability(true);
@@ -155,13 +167,26 @@ export default function AgendarPage() {
       }
 
       if (json.url) {
+        trackCheckoutSuccess({
+          serviceId: selectedTherapy,
+          serviceName: selectedTherapyData?.name,
+          price: selectedTherapyData?.price,
+          sessionType,
+        });
         window.location.href = json.url as string;
       } else {
+        trackCheckoutSuccess({
+          serviceId: selectedTherapy,
+          serviceName: selectedTherapyData?.name,
+          price: selectedTherapyData?.price,
+          sessionType,
+        });
         setIsComplete(true);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(msg || "Erro ao agendar");
+      trackCheckoutError("checkout", msg);
     } finally {
       setIsSubmitting(false);
     }

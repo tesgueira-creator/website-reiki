@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -238,7 +238,7 @@ export default function LojaPage() {
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-text-main mb-4">
               Produtos para o Seu Bem-Estar
             </h1>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto text-center">
               Cristais, óleos essenciais, livros e acessórios selecionados para
               apoiar a sua jornada de transformação espiritual.
             </p>

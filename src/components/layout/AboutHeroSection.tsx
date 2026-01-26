@@ -18,9 +18,10 @@ export function AboutHeroSection() {
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-text-main leading-tight">
             Uma Jornada de Cura e Espiritualidade
           </h1>
-          <p className="text-text-secondary text-xl leading-relaxed max-w-2xl mx-auto">
-            Há mais de 10 anos dedicada à transformação de vidas através do Reiki
-            Kundalini, terapias holísticas e orientação espiritual profunda.
+          <p className="text-text-secondary text-xl leading-relaxed max-w-2xl mx-auto text-center">
+            Há mais de 10 anos dedicada à transformação de vidas através do
+            Reiki Kundalini, terapias holísticas e orientação espiritual
+            profunda.
           </p>
         </motion.div>
       </div>

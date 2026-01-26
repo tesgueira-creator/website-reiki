@@ -47,10 +47,10 @@ export default function ReferralPage() {
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
               Como Funciona?
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-center">
               Processo simples em 3 passos
             </p>
-            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {[
@@ -112,7 +112,7 @@ export default function ReferralPage() {
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">
               Porquê Indicar?
             </h2>
-            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
@@ -217,7 +217,7 @@ export default function ReferralPage() {
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-6">
               Tens Questões?
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto text-center">
               Estamos aqui para ajudar! Entra em contacto connosco para qualquer
               dúvida sobre o programa de referência.
             </p>
