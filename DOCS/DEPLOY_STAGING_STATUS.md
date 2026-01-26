@@ -37,7 +37,7 @@ Os seguintes secrets foram **configurados e prontos** no repositório:
 ### Opção 1: Adicionar Secrets via GitHub UI (garantido)
 1. Acede a: https://github.com/tesgueira-creator/website-reiki/settings/secrets/actions
 2. Para cada secret abaixo, clica **New repository secret** e adiciona:
-   - Name: `VERCEL_TOKEN_STAGING` → Value: `7mJjR0rpFuBfDxxoWGufZSyy`
+   - Name: `VERCEL_TOKEN_STAGING` → Value: `REDACTED - add in GitHub Secrets`
    - Name: `VERCEL_PROJECT_ID_STAGING` → Value: `prj_apnmfPtBZBv9OP4xnupMIwN8vQ8A`
    - Name: `VERCEL_ORG_ID_STAGING` → Value: `tesgueira-creator`
    - (e os outros SANITY_*, STRIPE_*, RESEND_*, NEXTAUTH_* — valores acima já foram adicionados)
