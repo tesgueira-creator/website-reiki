@@ -28,6 +28,21 @@ jobs:
           # Mask variables in logs to be extra-safe
           echo "SANITY_WRITE_TOKEN=***" | sed -n '1p'
 
+          # Fail fast with a helpful message if Vercel vars are missing
+          if [ -z "${VERCEL_TOKEN:-}" ] || [ -z "${VERCEL_PROJECT_ID:-}" ]; then
+            echo "Error: VERCEL_TOKEN_STAGING or VERCEL_PROJECT_ID_STAGING is not set in repository secrets."
+            echo "Set the following secrets in GitHub: VERCEL_TOKEN_STAGING (a Vercel Personal Token) and VERCEL_PROJECT_ID_STAGING (the project id, e.g. prj_...)."
+            exit 1
+          fi
+
+          # Verify the project exists and the token has access
+          http_status=$(curl -s -o /tmp/verify.json -w "%{http_code}" -H "Authorization: Bearer $VERCEL_TOKEN" "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID")
+          if [ "$http_status" -ge 400 ]; then
+            echo "Vercel API project verification failed -> HTTP $http_status"
+            echo "Response:" && cat /tmp/verify.json
+            exit 1
+          fi
+
       - name: Add server envs to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_STAGING }}
